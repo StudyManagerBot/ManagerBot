@@ -8,4 +8,5 @@ jar.enabled = true
 
 dependencies {
     implementation(project(":domain"))
+    api("net.dv8tion:JDA:${rootProject.extra.get("jdaVersion")}")
 }
