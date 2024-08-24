@@ -4,6 +4,7 @@ import app.discord.jda.JDAInstance
 import app.discord.common.EnableDiscordBot
 import net.dv8tion.jda.api.JDA
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
@@ -19,7 +20,14 @@ class JDAConfiguration(
     fun jdaInstance() = JDAInstance(secretToken = this.secretToken)
 
     @Bean
+    fun eventListenerAdapter(beanFactory: ConfigurableListableBeanFactory) = EventListenerAdapter(beanFactory = beanFactory)
+
+    @Bean
     @ConditionalOnMissingBean(JDA::class)
-    fun jda(jdaInstance: JDAInstance) = jdaInstance.jda
+    fun jda(jdaInstance: JDAInstance, eventListenerAdapter: EventListenerAdapter) : JDA{
+        eventListenerAdapter.addListeners(jdaInstance = jdaInstance)
+        return jdaInstance.jda
+    }
+
 
 }
