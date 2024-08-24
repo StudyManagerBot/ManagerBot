@@ -19,6 +19,7 @@ java {
 ext{
     set("kotestVersion", "5.9.0") // https://kotest.io/docs/changelog.html
     set("kotestSpringExtensionVersion", "1.3.0") // https://kotest.io/docs/extensions/spring.html
+    set("jdaVersion", "5.0.2")
 }
 
 kotlin {
@@ -61,6 +62,7 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
         testFixturesImplementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
         testImplementation("io.kotest:kotest-runner-junit5-jvm:${rootProject.extra.get("kotestVersion")}")
         testImplementation("io.kotest.extensions:kotest-extensions-spring:${rootProject.extra.get("kotestSpringExtensionVersion")}")
     }

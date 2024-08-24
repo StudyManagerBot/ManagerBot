@@ -1,0 +1,26 @@
+
+server:
+  port: 80
+  servlet:
+    session:
+      timeout: 5000
+
+management:
+  endpoint:
+    logfile:
+      external-file: ~/logback.log
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,loggers,metrics,mappings,threaddump,conditions,info,heapdump
+      base-path: /api/actuator
+      path-mapping:
+        loggers: logs
+        httptrace: trace
+
+
+discord:
+  bot:
+    secretToken: YOUR_SECRET_TOKEN
