@@ -1,6 +1,6 @@
 package app.discord.configurations.jda
 
-import app.discord.bot.JDAInstance
+import app.discord.jda.JDAInstance
 import app.discord.common.EnableDiscordBot
 import net.dv8tion.jda.api.JDA
 import org.springframework.beans.factory.annotation.Value
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-@ConditionalOnBean( annotation = [EnableDiscordBot::class])
+@ConditionalOnBean( annotation = [EnableDiscordBot::class] )
 class JDAConfiguration(
     @Value("\${discord.bot.secretToken}") private val secretToken: String
 ){

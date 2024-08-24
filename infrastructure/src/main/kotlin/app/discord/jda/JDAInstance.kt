@@ -1,4 +1,4 @@
-package app.discord.bot
+package app.discord.jda
 
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
