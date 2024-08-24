@@ -18,6 +18,7 @@ class GuildMemberJoinEventListener(
 
     private fun firstMemberJoin(event: GuildMemberJoinEvent) = FirstMemberJoin(
         userId = event.user.id,
-        name = event.user.name
+        name = event.user.name,
+        memberId = event.member.id
     )
 }
