@@ -1,6 +1,5 @@
-package app.discord.common
+package app.discord.configurations
 
-import app.discord.configurations.jda.JDAConfiguration
 import org.springframework.context.annotation.Import
 
 @Target(

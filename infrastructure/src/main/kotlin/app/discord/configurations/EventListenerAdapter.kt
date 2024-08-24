@@ -1,4 +1,4 @@
-package app.discord.configurations.jda
+package app.discord.configurations
 
 import app.discord.jda.JDAInstance
 import app.discord.listeners.DiscordEventHandler

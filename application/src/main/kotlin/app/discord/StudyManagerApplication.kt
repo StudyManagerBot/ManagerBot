@@ -1,6 +1,6 @@
 package app.discord
 
-import app.discord.common.EnableDiscordBot
+import app.discord.configurations.EnableDiscordBot
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 

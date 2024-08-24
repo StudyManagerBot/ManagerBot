@@ -8,5 +8,6 @@ jar.enabled = true
 
 dependencies {
     implementation(project(":domain"))
-    api("net.dv8tion:JDA:${rootProject.extra.get("jdaVersion")}")
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("net.dv8tion:JDA:${rootProject.extra.get("jdaVersion")}")
 }

@@ -1,7 +1,6 @@
-package app.discord.configurations.jda
+package app.discord.configurations
 
 import app.discord.jda.JDAInstance
-import app.discord.common.EnableDiscordBot
 import net.dv8tion.jda.api.JDA
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory
