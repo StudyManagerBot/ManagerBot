@@ -14,6 +14,8 @@ class GuildMemberJoinEventListener(
         this.applicationEventPublisher.publishEvent(
             this.firstMemberJoin(event = event)
         )
+        event.user.retrieveProfile()
+
     }
 
     private fun firstMemberJoin(event: GuildMemberJoinEvent) = FirstMemberJoin(
