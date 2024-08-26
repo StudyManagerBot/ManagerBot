@@ -14,12 +14,14 @@ class GuildMemberJoinEventListener(
         this.applicationEventPublisher.publishEvent(
             this.firstMemberJoin(event = event)
         )
-
     }
 
     private fun firstMemberJoin(event: GuildMemberJoinEvent) = FirstMemberJoin(
+        guildId = event.guild.id,
         userId = event.user.id,
-        name = event.user.name,
-        memberId = event.member.id
+        username = event.user.name,
+        globalName = event.user.globalName
+            ?: "",
+        firstJoinTimestamp = event.member.timeJoined
     )
 }

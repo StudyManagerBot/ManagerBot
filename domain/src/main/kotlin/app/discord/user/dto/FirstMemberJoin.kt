@@ -1,7 +1,11 @@
 package app.discord.user.dto
 
+import java.time.OffsetDateTime
+
 data class FirstMemberJoin(
+    val guildId: String,
     val userId: String,
-    val name: String,
-    val memberId: String
+    val username: String,
+    val globalName: String,
+    val firstJoinTimestamp: OffsetDateTime
 )

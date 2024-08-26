@@ -1,13 +1,14 @@
 package app.discord.user.entity
 
+import java.time.OffsetDateTime
+
 class User (
-    val id: String,
+    val guildId: String,
+    val userId: String,
     val username: String,
     val globalName: String,
     val authId: Int,
-    val enabled: Boolean,
-    val firstJoinTimestamp: Long,
-    val guildOutTimestamp: Long,
-    val lastActivityTimestamp: Long
+    val ban: Boolean,
+    val firstJoinTimestamp: OffsetDateTime
 ){
 }
