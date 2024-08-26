@@ -7,4 +7,5 @@ abstract class DiscordListener(
     val applicationEventPublisher: ApplicationEventPublisher
 ): ListenerAdapter() {
 
+    internal fun publishEvent(event: Any) = this.applicationEventPublisher.publishEvent(event)
 }
