@@ -1,7 +1,7 @@
 package app.discord.user.dto
 
 data class ChangedNickNameEvent(
-    val guildId: String,
-    val memberId: String,
+    val guildId: Long,
+    val memberId: Long,
     val nickname: String
 )

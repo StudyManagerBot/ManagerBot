@@ -17,8 +17,8 @@ class GuildMemberJoinEventListener(
     }
 
     private fun memberRegister(event: GuildMemberJoinEvent) = MemberRegisterEvent(
-        guildId = event.guild.id,
-        userId = event.user.id,
+        guildId = event.guild.idLong,
+        userId = event.user.idLong,
         username = event.user.name,
         globalName = event.user.globalName ?: "",
         registerTime = event.member.timeJoined

@@ -18,8 +18,8 @@ class GuildMemberLeaveEventListener(
 
     private fun memberRemove(event: GuildMemberRemoveEvent) =
         GuildMemberLeaveEvent(
-            guildId = event.guild.id,
-            userId = event.user.id,
+            guildId = event.guild.idLong,
+            userId = event.user.idLong,
             leaveTime = OffsetDateTime.now()
         )
 
