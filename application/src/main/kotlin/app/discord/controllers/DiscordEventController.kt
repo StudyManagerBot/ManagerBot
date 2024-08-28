@@ -1,6 +1,6 @@
 package app.discord.controllers
 
-import app.discord.attendance.dto.ServerMemberJoinEvent
+import app.discord.user.dto.attendance.ServerMemberJoinEvent
 import app.discord.user.dto.FirstMemberJoin
 import org.springframework.context.event.EventListener
 

@@ -1,12 +1,12 @@
-package app.discord.attendance.dto
+package app.discord.user.dto.attendance
 
 import java.time.OffsetDateTime
 
-data class ServerMemberLeftEvent(
+data class ServerMemberJoinEvent(
     val userId: String,
     val userName: String,
 
     val channelId: String,
     val channelName: String,
-    val leftTime: OffsetDateTime
+    val joinTime: OffsetDateTime
 )

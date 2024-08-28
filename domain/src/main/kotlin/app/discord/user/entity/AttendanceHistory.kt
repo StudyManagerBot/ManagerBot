@@ -1,6 +1,6 @@
-package app.discord.attendance.entity
+package app.discord.user.entity
 
-import app.discord.attendance.dto.UserAttendance
+import app.discord.user.dto.attendance.UserAttendance
 
 internal class AttendanceHistory(
     attendanceHistories: List<UserAttendance>

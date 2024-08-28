@@ -1,7 +1,7 @@
 package app.discord.listeners
 
-import app.discord.attendance.dto.ServerMemberJoinEvent
-import app.discord.attendance.dto.ServerMemberLeftEvent
+import app.discord.user.dto.attendance.ServerMemberJoinEvent
+import app.discord.user.dto.attendance.ServerMemberLeftEvent
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent
 import org.springframework.context.ApplicationEventPublisher
