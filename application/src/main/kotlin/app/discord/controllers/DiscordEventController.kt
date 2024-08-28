@@ -1,7 +1,7 @@
 package app.discord.controllers
 
 import app.discord.attendance.dto.ServerMemberJoinEvent
-import app.discord.user.dto.FirstMemberJoin
+import app.discord.user.dto.MemberRegisterEvent
 import org.springframework.context.event.EventListener
 
 class DiscordEventController() {
@@ -11,8 +11,8 @@ class DiscordEventController() {
 
     }
 
-    @EventListener(FirstMemberJoin::class)
-    fun saveFirstJoinUserEvent(event: FirstMemberJoin) {
+    @EventListener(MemberRegisterEvent::class)
+    fun saveFirstJoinUserEvent(event: MemberRegisterEvent) {
         
     }
 }

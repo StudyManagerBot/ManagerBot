@@ -1,6 +1,6 @@
 package app.discord.listeners
 
-import app.discord.user.dto.FirstMemberJoin
+import app.discord.user.dto.MemberRegisterEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import org.springframework.context.ApplicationEventPublisher
 
@@ -12,16 +12,15 @@ class GuildMemberJoinEventListener(
 
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
         this.applicationEventPublisher.publishEvent(
-            this.firstMemberJoin(event = event)
+            this.memberRegister(event = event)
         )
     }
 
-    private fun firstMemberJoin(event: GuildMemberJoinEvent) = FirstMemberJoin(
+    private fun memberRegister(event: GuildMemberJoinEvent) = MemberRegisterEvent(
         guildId = event.guild.id,
         userId = event.user.id,
         username = event.user.name,
-        globalName = event.user.globalName
-            ?: "",
-        firstJoinTimestamp = event.member.timeJoined
+        globalName = event.user.globalName ?: "",
+        registerTime = event.member.timeJoined
     )
 }

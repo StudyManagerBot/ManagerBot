@@ -10,5 +10,4 @@ class User (
     val authId: Int,
     val ban: Boolean,
     val firstJoinTimestamp: OffsetDateTime
-){
-}
+)
