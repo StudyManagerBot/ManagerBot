@@ -9,16 +9,17 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-@Configuration
-@ConditionalOnBean( annotation = [EnableDiscordBot::class] )
+//@Configuration
+//@ConditionalOnBean( annotation = [EnableDiscordBot::class] )
+@Deprecated(message = "ForRemoval")
 class ListenerConfigurations {
 
-    @Bean
+//    @Bean
     fun guildMemberJoinEventListenerAdapter(
         applicationEventPublisher: ApplicationEventPublisher
     ) = GuildMemberJoinEventListener(applicationEventPublisher = applicationEventPublisher)
 
-    @Bean
+//    @Bean
     fun guildVoiceUpdateListener(
         applicationEventPublisher: ApplicationEventPublisher
     ) = GuildVoiceUpdateListener(applicationEventPublisher = applicationEventPublisher)
