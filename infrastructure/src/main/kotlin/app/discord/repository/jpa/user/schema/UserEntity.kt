@@ -12,22 +12,22 @@ class UserEntity(
     @field: GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @field: Column(name = "GUILD_ID")
+    @field: Column(name = "GUILD_ID", nullable = false)
     val guildId: String,
 
-    @field: Column(name = "USER_ID")
+    @field: Column(name = "USER_ID", nullable = false)
     val userId: String,
 
-    @field: Column(name = "USER_NAME")
+    @field: Column(name = "USER_NAME", nullable = false)
     val username: String,
 
-    @field: Column(name = "GLOBAL_NAME")
+    @field: Column(name = "GLOBAL_NAME", nullable = false)
     val globalName: String,
 
-    @field: Column(name = "NICKNAME")
+    @field: Column(name = "NICKNAME", nullable = false)
     val nickname: String,
 
-    @field: Column(name = "IS_BAN")
+    @field: Column(name = "IS_BAN", nullable = false)
     val isBan: Boolean,
 
     @field: CreationTimestamp
