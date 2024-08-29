@@ -1,9 +1,9 @@
 package app.discord.controllers
 
-import app.discord.attendance.dto.ServerMemberJoinEvent
 import app.discord.service.user.UserService
 import app.discord.user.dto.UserRegisterEvent
 import app.discord.user.dto.UserUpdateEvent
+import app.discord.user.dto.attendance.ServerMemberJoinEvent
 import org.springframework.context.event.EventListener
 
 class DiscordEventController(
