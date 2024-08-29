@@ -1,5 +1,6 @@
 package app.discord.listeners
 
+import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.attendance.ServerMemberJoinEvent
 import app.discord.user.dto.attendance.ServerMemberLeftEvent
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion
@@ -20,14 +21,16 @@ class GuildVoiceUpdateListener(
 
     private fun toServerMemberJoinEvent(event: GuildVoiceUpdateEvent, audioChannel: AudioChannelUnion) =
         ServerMemberJoinEvent(
-            userId = event.member.user.id, userName = event.member.user.name,
+            userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.member.user.id),
+            userName = event.member.user.name,
             channelId = audioChannel.id, channelName = audioChannel.name,
             joinTime = OffsetDateTime.now()
         )
 
     private fun toServerMemberLeftEvent(event: GuildVoiceUpdateEvent, audioChannel: AudioChannelUnion) =
         ServerMemberLeftEvent(
-            userId = event.member.user.id, userName = event.member.user.name,
+            userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.member.user.id),
+            userName = event.member.user.name,
             channelId = audioChannel.id, channelName = audioChannel.name,
             leftTime = OffsetDateTime.now()
         )

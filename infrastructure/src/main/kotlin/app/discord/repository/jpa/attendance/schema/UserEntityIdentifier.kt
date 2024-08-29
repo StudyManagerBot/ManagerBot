@@ -5,9 +5,9 @@ import jakarta.persistence.Embeddable
 import java.io.Serializable
 
 @Embeddable
-class UserIdentifier(
+class UserEntityIdentifier(
     @field:Column(name = "GUILD_ID")
-    val guildId: Long,
+    val guildId: String,
 
     @field:Column(name = "USER_ID")
     val userId: String

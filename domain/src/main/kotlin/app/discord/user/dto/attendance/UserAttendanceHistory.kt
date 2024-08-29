@@ -1,7 +1,8 @@
 package app.discord.user.dto.attendance
 
+import app.discord.user.dto.UserIdentifier
+
 data class UserAttendanceHistory(
-    val guildId: Long,
-    val userId: String,
+    val userIdentifier: UserIdentifier,
     val attendanceDates: List<UserAttendance>
 )

@@ -1,24 +1,33 @@
 package app.discord.user.entity
 
+import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.attendance.ServerMemberJoinEvent
 import app.discord.user.dto.attendance.ServerMemberLeftEvent
+import app.discord.user.dto.attendance.UserAttendance
 import app.discord.user.dto.attendance.UserAttendanceHistory
 import java.time.OffsetDateTime
 
-// will become subdomain of user entity
 internal class Attendance(
-    histories: UserAttendanceHistory
+    histories: Map<UserIdentifier, UserAttendanceHistory>
 ){
-    private val attendanceHistories: Map<OffsetDateTime, AttendanceHistory> = this.classifyHistory(histories = histories)
+    private val attendanceHistories = histories.mapValues { AttendanceHistory(attendanceHistories = it.value) }.toMutableMap()
 
-    private fun classifyHistory(histories: UserAttendanceHistory)
-    = histories.attendanceDates.associateBy({ it.date }, { AttendanceHistory(attendanceHistories = listOf(it)) })
-
-    fun updateAttendance( serverMemberJoinEvent: ServerMemberJoinEvent){
-        
+    internal fun updateAttendance( serverMemberJoinEvent: ServerMemberJoinEvent){
+        this.attendanceHistories[serverMemberJoinEvent.userIdentifier]
+            .let { existingHistory ->
+                existingHistory ?: AttendanceHistory(attendanceHistories =
+                    UserAttendanceHistory(
+                        userIdentifier = serverMemberJoinEvent.userIdentifier,
+                        attendanceDates = listOf()
+                    )
+                ).also {
+                    this.attendanceHistories[serverMemberJoinEvent.userIdentifier] = it
+                    it.doAttendance(attendanceTime = serverMemberJoinEvent.joinTime)
+                }
+            }
     }
 
-    fun updateAttendance( serverMemberLeftEvent: ServerMemberLeftEvent){
+    internal fun updateAttendance( serverMemberLeftEvent: ServerMemberLeftEvent ){
 
     }
 }

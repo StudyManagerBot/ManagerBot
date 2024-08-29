@@ -1,14 +1,17 @@
 package app.discord.repository.jpa.attendance.schema
 
-import jakarta.persistence.Column
-import jakarta.persistence.EmbeddedId
-import jakarta.persistence.Entity
+import jakarta.persistence.*
 import java.time.OffsetDateTime
 
 @Entity
 class JpaAttendanceHistoryEntity(
-    @field:EmbeddedId
-    val userIdentifier: UserIdentifier,
+
+    @field:Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+
+    @field:Embedded
+    val userIdentifier: UserEntityIdentifier,
 
     @field:Column(name = "DATE")
     val date: OffsetDateTime,
