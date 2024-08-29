@@ -5,15 +5,14 @@ import app.discord.attendance.entity.Attendance
 import java.time.OffsetDateTime
 
 class User (
-    val usersId: Long,
-    val guildId: Long,
-    val userId: Long,
+    val guildId: String,
+    val userId: String,
     val username: String,
     val globalName: String,
     val nickName: String,
     val registerTime: OffsetDateTime,
-    val lastVisitTime: OffsetDateTime,
     val leaveTime: OffsetDateTime,
+    val isBan: Boolean,
     userAttendanceHistory: UserAttendanceHistory
 ){
     private val attendance: Attendance

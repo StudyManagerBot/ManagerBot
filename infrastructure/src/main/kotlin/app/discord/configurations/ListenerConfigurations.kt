@@ -24,12 +24,12 @@ class ListenerConfigurations {
         applicationEventPublisher: ApplicationEventPublisher
     ) = GuildVoiceUpdateListener(applicationEventPublisher = applicationEventPublisher)
 
-    @Bean
+//    @Bean
     fun guildMemberLeaveEventListener(
         applicationEventPublisher: ApplicationEventPublisher
     ) = GuildMemberLeaveEventListener(applicationEventPublisher = applicationEventPublisher)
 
-    @Bean
+//    @Bean
     fun guildMemberUpdateEventListener(
         applicationEventPublisher: ApplicationEventPublisher
     ) = GuildMemberUpdateEventListener(applicationEventPublisher = applicationEventPublisher)

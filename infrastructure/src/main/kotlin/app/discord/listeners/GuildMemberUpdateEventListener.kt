@@ -24,15 +24,15 @@ class GuildMemberUpdateEventListener(
     }
 
     private fun memberUpdate(event: GuildMemberUpdateEvent) = UserUpdateEvent(
-        guildId = event.guild.idLong,
-        userId = event.user.idLong,
+        guildId = event.guild.id,
+        userId = event.user.id,
         name = event.user.name,
         nickname = event.member.nickname
             ?: ""
     )
     private fun memberNicknameUpdate(event: GuildMemberUpdateNicknameEvent) = ChangedNickNameEvent(
-        guildId = event.guild.idLong,
-        memberId = event.member.idLong,
+        guildId = event.guild.id,
+        memberId = event.member.id,
         nickname = event.member.nickname
             ?: ""
     )
