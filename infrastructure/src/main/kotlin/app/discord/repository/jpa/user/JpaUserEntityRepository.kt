@@ -5,6 +5,6 @@ import jakarta.persistence.Entity
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-interface JpaUserEntityRepository: JpaRepository<UserEntity, UUID>{
+interface JpaUserEntityRepository: JpaRepository<UserEntity, Long>{
     fun findByGuildIdAndUserId(userId: String, guildId: String): Optional<UserEntity>
 }

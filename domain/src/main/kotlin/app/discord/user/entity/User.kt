@@ -1,23 +1,18 @@
 package app.discord.user.entity
 
-import app.discord.attendance.dto.UserAttendanceHistory
-import app.discord.attendance.entity.Attendance
+import app.discord.user.dto.UserIdentifier
+import app.discord.user.dto.attendance.UserAttendanceHistory
 import java.time.OffsetDateTime
 
 class User (
-    val guildId: String,
-    val userId: String,
+    val userIdentifier: UserIdentifier,
     val username: String,
     val globalName: String,
     val nickName: String,
     val registerTime: OffsetDateTime,
     val leaveTime: OffsetDateTime,
     val isBan: Boolean,
-    userAttendanceHistory: UserAttendanceHistory
+    userAttendanceHistory: Map<UserIdentifier, UserAttendanceHistory>
 ){
-    private val attendance: Attendance
-    init{
-        attendance = Attendance(histories = userAttendanceHistory)
-    }
-
+    private val attendance: Attendance = Attendance(histories = userAttendanceHistory)
 }

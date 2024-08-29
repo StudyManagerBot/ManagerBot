@@ -10,32 +10,32 @@ import java.time.OffsetDateTime
 class UserEntity(
     @field: Id
     @field: GeneratedValue(strategy = GenerationType.IDENTITY)
-    val UsersIdx: Long,
+    val id: Long,
 
-    @field: Column(name = "GUILD_ID", nullable = false, length = 4)
+    @field: Column(name = "GUILD_ID")
     val guildId: String,
 
-    @field: Column(name = "USER_ID", nullable = false, length = 4)
+    @field: Column(name = "USER_ID")
     val userId: String,
 
-    @field: Column(name = "USER_NAME", nullable = false, length = 32)
+    @field: Column(name = "USER_NAME")
     val username: String,
 
-    @field: Column(name = "GLOBAL_NAME", nullable = false, length = 32)
+    @field: Column(name = "GLOBAL_NAME")
     val globalName: String,
 
-    @field: Column(name = "NICKNAME", nullable = false, length = 32)
+    @field: Column(name = "NICKNAME")
     val nickname: String,
 
-    @field: Column(name = "IS_BAN", nullable = false)
+    @field: Column(name = "IS_BAN")
     val isBan: Boolean,
 
     @field: CreationTimestamp
     @field: TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
-    @field: Column(name = "CREATED_TIME", nullable = false)
+    @field: Column(name = "CREATED_TIME")
     val registerTime: OffsetDateTime,
 
-    @field: Column(name = "LEAVE_TIME", nullable = false)
-    @TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
+    @field: Column(name = "LEAVE_TIME")
+    @field: TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     val leaveTime: OffsetDateTime
 )

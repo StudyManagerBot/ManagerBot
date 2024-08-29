@@ -1,6 +1,7 @@
 package app.discord.listeners
 
-import app.discord.user.dto.ChangedNickNameEvent
+import app.discord.user.dto.NickNameChangedEvent
+import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.UserUpdateEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberUpdateEvent
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent
@@ -13,27 +14,23 @@ class GuildMemberUpdateEventListener(
 
     override fun onGuildMemberUpdate(event: GuildMemberUpdateEvent) {
         this.applicationEventPublisher.publishEvent(
-            this.memberUpdate(event = event)
+            this.toUserUpdateEvent(event = event)
         )
     }
 
     override fun onGuildMemberUpdateNickname(event: GuildMemberUpdateNicknameEvent) {
         this.applicationEventPublisher.publishEvent(
-            this.memberNicknameUpdate(event = event)
+            this.toNickNameChangedEvent(event = event)
         )
     }
 
-    private fun memberUpdate(event: GuildMemberUpdateEvent) = UserUpdateEvent(
-        guildId = event.guild.id,
-        userId = event.user.id,
+    private fun toUserUpdateEvent(event: GuildMemberUpdateEvent) = UserUpdateEvent(
+        userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.user.id),
         name = event.user.name,
-        nickname = event.member.nickname
-            ?: ""
+        nickname = event.member.nickname ?: "",
     )
-    private fun memberNicknameUpdate(event: GuildMemberUpdateNicknameEvent) = ChangedNickNameEvent(
-        guildId = event.guild.id,
-        memberId = event.member.id,
-        nickname = event.member.nickname
-            ?: ""
+    private fun toNickNameChangedEvent(event: GuildMemberUpdateNicknameEvent) = NickNameChangedEvent(
+        userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.user.id),
+        nickname = event.member.nickname ?: ""
     )
 }

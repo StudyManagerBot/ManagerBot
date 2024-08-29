@@ -1,10 +1,9 @@
 package app.discord.listeners
 
+import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.UserRegisterEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import org.springframework.context.ApplicationEventPublisher
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
 
 @DiscordEventHandler
 class GuildMemberJoinEventListener(
@@ -13,13 +12,12 @@ class GuildMemberJoinEventListener(
 
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
         this.applicationEventPublisher.publishEvent(
-            this.memberRegister(event = event)
+            this.toUserRegisterEvent(event = event)
         )
     }
 
-    private fun memberRegister(event: GuildMemberJoinEvent) = UserRegisterEvent(
-        guildId = event.guild.id,
-        userId = event.user.id,
+    private fun toUserRegisterEvent(event: GuildMemberJoinEvent) = UserRegisterEvent(
+        userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.member.user.id),
         username = event.user.name,
         globalName = event.user.globalName ?: "",
         registerTime = event.member.timeJoined
