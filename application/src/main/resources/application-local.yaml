@@ -1,33 +1,39 @@
 spring:
+  config:
+    activate:
+      on-profile: local
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  sql:
+    init:
+      mode: embedded
+
+  h2:
+    console:
+      enabled: true
+
   datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=MariaDB;DATABASE_TO_LOWER=TRUE
+    username: admin
+    password: admin
+
     hikari:
-      transaction-isolation: ${SQL_PROD_ISOLATION_LEVEL}
+      transaction-isolation: TRANSACTION_REPEATABLE_READ
       maximum-pool-size: 10
       #      minimum-idle: 10
-      connection-timeout: ${SQL_PROD_CONNECTION_TIMEOUT}
-      validation-timeout: ${SQL_PROD_VALIDATION_TIMEOUT}
+      connection-timeout: 5000
+      validation-timeout: 3000
       connection-test-query: SELECT 1
       idle-timeout: 600000
       max-lifetime: 1800000
       pool-name: hikari_pool
 
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: ${SQL_DATABASE_URL}
-    username: ${SQL_DATABASE_USERNAME}
-    password: ${SQL_DATABASE_PASSWORD}
-
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: false
-    generate-ddl: false
-  h2:
-    console:
-      enabled: false
-
-
 server:
-  port: 80
+  port: 8888
   servlet:
     session:
       timeout: 5000
@@ -42,11 +48,10 @@ management:
     web:
       exposure:
         include: health,loggers,metrics,mappings,threaddump,conditions,info,heapdump
-      base-path: ${ACTUATOR_BASE_PATH}
+      base-path: /api/actuator
       path-mapping:
         loggers: logs
         httptrace: trace
-
 
 discord:
   bot:
