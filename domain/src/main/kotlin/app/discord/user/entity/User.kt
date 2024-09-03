@@ -15,4 +15,15 @@ class User (
     userAttendanceHistory: Map<UserIdentifier, UserAttendanceHistory>
 ){
     private val attendance: Attendance = Attendance(histories = userAttendanceHistory)
+
+    companion object {
+        fun isNewUser(user: User?): Boolean {
+            return user != null
+        }
+    }
+
+
+
+
 }
+
