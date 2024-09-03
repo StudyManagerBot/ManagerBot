@@ -2,9 +2,18 @@ package app.discord.user.dto
 
 import java.time.OffsetDateTime
 
-data class UserRegisterEvent(
-    val userIdentifier: UserIdentifier,
-    val username: String,
-    val globalName: String,
-    val registerTime: OffsetDateTime
+class UserRegisterEvent(
+    userIdentifier: UserIdentifier,
+    userName: String,
+    globalName: String,
+    nickname: String,
+    registerTime: OffsetDateTime,
+    leaveTime: OffsetDateTime,
+): UserEvent(
+    userIdentifier = userIdentifier,
+    userName = userName,
+    globalName = globalName,
+    nickname = nickname,
+    registerTime = registerTime,
+    leaveTime = leaveTime
 )

@@ -6,9 +6,9 @@ import java.time.OffsetDateTime
 
 class User (
     val userIdentifier: UserIdentifier,
-    val username: String,
+    val userName: String,
     val globalName: String,
-    val nickName: String,
+    val nickname: String,
     val registerTime: OffsetDateTime,
     val leaveTime: OffsetDateTime,
     val isBan: Boolean,

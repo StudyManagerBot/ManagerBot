@@ -5,7 +5,9 @@ import app.discord.user.dto.UserRegisterEvent
 import app.discord.user.dto.UserUpdateEvent
 import app.discord.user.dto.attendance.ServerMemberJoinEvent
 import org.springframework.context.event.EventListener
+import org.springframework.stereotype.Controller
 
+@Controller
 class DiscordEventController(
     private val userService: UserService,
 ) {

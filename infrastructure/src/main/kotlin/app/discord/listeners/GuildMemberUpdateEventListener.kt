@@ -26,7 +26,7 @@ class GuildMemberUpdateEventListener(
 
     private fun toUserUpdateEvent(event: GuildMemberUpdateEvent) = UserUpdateEvent(
         userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.user.id),
-        name = event.user.name,
+        userName = event.user.name,
         nickname = event.member.nickname ?: "",
     )
     private fun toNickNameChangedEvent(event: GuildMemberUpdateNicknameEvent) = NickNameChangedEvent(
