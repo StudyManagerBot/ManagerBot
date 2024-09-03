@@ -10,22 +10,26 @@ import java.time.OffsetDateTime
 internal class Attendance(
     histories: Map<UserIdentifier, UserAttendanceHistory>
 ){
-    private val attendanceHistories = histories.mapValues { AttendanceHistory(attendanceHistories = it.value) }.toMutableMap()
+    private val attendanceHistories = histories.mapValues {
+        AttendanceHistory(attendanceHistories = it.value)
+    }.toMutableMap()
 
-    internal fun updateAttendance( serverMemberJoinEvent: ServerMemberJoinEvent){
-        this.attendanceHistories[serverMemberJoinEvent.userIdentifier]
-            .let { existingHistory ->
-                existingHistory ?: AttendanceHistory(attendanceHistories =
-                    UserAttendanceHistory(
-                        userIdentifier = serverMemberJoinEvent.userIdentifier,
-                        attendanceDates = listOf()
+    internal fun updateAttendance( serverMemberJoinEvent: ServerMemberJoinEvent) =
+        this.attendanceHistories.getOrPut(serverMemberJoinEvent.userIdentifier) {
+            AttendanceHistory(
+                attendanceHistories = UserAttendanceHistory(
+                    userIdentifier = serverMemberJoinEvent.userIdentifier,
+                    attendanceDates = listOf(
+                        UserAttendance(
+                            attendanceTime = serverMemberJoinEvent.joinTime,
+                            date = serverMemberJoinEvent.joinTime,
+                            exitTime = null
+                        )
                     )
-                ).also {
-                    this.attendanceHistories[serverMemberJoinEvent.userIdentifier] = it
-                    it.doAttendance(attendanceTime = serverMemberJoinEvent.joinTime)
-                }
-            }
-    }
+                )
+            )
+        }.checkAttendance(attendanceTime = serverMemberJoinEvent.joinTime)
+
 
     internal fun updateAttendance( serverMemberLeftEvent: ServerMemberLeftEvent ){
 
