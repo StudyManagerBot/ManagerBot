@@ -79,6 +79,7 @@ class JpaUserRepository(
         jpaUserEntityRepository.save(userEntity)
     }
 
+
     private fun toDomainEntity(entity: UserEntity, jpaAttendanceHistories: List<JpaAttendanceHistoryEntity>): User {
         val userIdentifier = UserIdentifier(guildId = entity.guildId, userId = entity.userId)
         val user = User(

@@ -1,11 +1,11 @@
 package app.discord.service.user
 
-import app.discord.user.dto.NickNameChangedEvent
+import app.discord.user.dto.*
+import app.discord.user.dto.attendance.UserAttendanceHistory
 import app.discord.user.entity.User
-import app.discord.user.dto.UserRegisterEvent
-import app.discord.user.dto.UserUpdateEvent
 import app.discord.user.repository.UserRepository
 import org.springframework.stereotype.Service
+import java.time.OffsetDateTime
 
 @Service
 class UserServiceImpl(
@@ -13,12 +13,10 @@ class UserServiceImpl(
 ) : UserService{
 
     override fun registerUser(userRegisterEvent: UserRegisterEvent) {
-        // 1. 유저가 존재하는지?
-        // 2. 있다면 그 유저가 누구인지
         val user: User? = userRepository.findUser(userIdentifier = userRegisterEvent.userIdentifier)
 
         if(User.isNewUser(user)){
-            val registerUser = User(
+            val registerUser = this.toDomainEntity(
                 userIdentifier = userRegisterEvent.userIdentifier,
                 userName = userRegisterEvent.userName,
                 globalName = userRegisterEvent.globalName,
@@ -35,15 +33,13 @@ class UserServiceImpl(
 
     override fun updateUser(userUpdateEvent: UserUpdateEvent) {
         val user: User = userRepository.findUserWithNullException(userIdentifier = userUpdateEvent.userIdentifier)
-        val updateUser = User(
+        val updateUser = this.toDomainEntity(
             userIdentifier = userUpdateEvent.userIdentifier,
             userName = userUpdateEvent.userName,
             globalName = user.globalName,
             nickname = userUpdateEvent.nickname,
             registerTime = user.registerTime,
-            leaveTime = user.leaveTime,
-            isBan = false,
-            userAttendanceHistory = emptyMap()
+            leaveTime = user.leaveTime
         )
 
         userRepository.updateUser(user = updateUser)
@@ -51,21 +47,49 @@ class UserServiceImpl(
 
     override fun updateUserNickname(userNickNameChangedEvent: NickNameChangedEvent) {
         val user: User = userRepository.findUserWithNullException(userIdentifier = userNickNameChangedEvent.userIdentifier)
-        val updateUser = User(
-            userIdentifier = userNickNameChangedEvent.userIdentifier,
+        val updateUser = this.toDomainEntity(
+            userIdentifier = user.userIdentifier,
             userName = user.userName,
             globalName = user.globalName,
             nickname = userNickNameChangedEvent.nickname,
             registerTime = user.registerTime,
-            leaveTime = user.leaveTime,
-            isBan = false,
-            userAttendanceHistory = emptyMap()
+            leaveTime = user.leaveTime
         )
         userRepository.updateUser(user = updateUser)
     }
 
+    override fun leaveUser(guildMemberLeaveEvent: GuildMemberLeaveEvent) {
+        val user: User = userRepository.findUserWithNullException(userIdentifier = guildMemberLeaveEvent.userIdentifier)
+        val leavedUser = this.toDomainEntity(
+            userIdentifier = user.userIdentifier,
+            userName = user.userName,
+            globalName = user.globalName,
+            nickname = user.nickname,
+            registerTime = user.registerTime,
+            leaveTime = guildMemberLeaveEvent.leaveTime
+        )
+        userRepository.updateUser(user = leavedUser)
+    }
 
-    // 1. event의 추상클래스 작성
-    // 2. ??
+    private fun toDomainEntity(
+        userIdentifier: UserIdentifier,
+        userName: String,
+        globalName: String,
+        nickname: String,
+        registerTime: OffsetDateTime,
+        leaveTime: OffsetDateTime,
+        isBan: Boolean = false,
+        userAttendanceHistory: Map<UserIdentifier, UserAttendanceHistory> = emptyMap()
+    ) =
+        User(
+            userIdentifier = userIdentifier,
+            userName = userName,
+            globalName = globalName,
+            nickname = nickname,
+            registerTime = registerTime,
+            leaveTime = leaveTime,
+            isBan = isBan,
+            userAttendanceHistory = userAttendanceHistory
+        )
 
 }
