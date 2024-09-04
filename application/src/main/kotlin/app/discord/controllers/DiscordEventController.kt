@@ -25,7 +25,7 @@ class DiscordEventController(
 
     @EventListener(UserUpdateEvent::class)
     fun userUpdateEvent(event: UserUpdateEvent) {
-        userService.updateUser(userUpdateEvent = event)
+        userService.updateUserInfo(userUpdateEvent = event)
     }
 
     @EventListener(GuildMemberLeaveEvent::class)

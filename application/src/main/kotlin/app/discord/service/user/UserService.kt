@@ -8,7 +8,7 @@ import app.discord.user.dto.UserUpdateEvent
 
 interface UserService {
     fun registerUser(userRegisterEvent: UserRegisterEvent)
-    fun updateUser(userUpdateEvent: UserUpdateEvent)
+    fun updateUserInfo(userUpdateEvent: UserUpdateEvent)
     fun updateUserNickname(userNickNameChangedEvent: NickNameChangedEvent)
 //    fun toGuildMemberLeaveEvent
     fun leaveUser(guildMemberLeaveEvent: GuildMemberLeaveEvent)

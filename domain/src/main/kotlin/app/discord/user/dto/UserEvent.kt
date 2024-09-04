@@ -6,8 +6,8 @@ import java.time.OffsetDateTime
 abstract class UserEvent(
     val userIdentifier: UserIdentifier,
     val userName: String,
+    val registerTime: OffsetDateTime,
     val globalName: String,
     val nickname: String,
-    val registerTime: OffsetDateTime,
     val leaveTime: OffsetDateTime
 )

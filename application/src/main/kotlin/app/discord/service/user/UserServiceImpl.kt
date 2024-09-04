@@ -1,11 +1,9 @@
 package app.discord.service.user
 
 import app.discord.user.dto.*
-import app.discord.user.dto.attendance.UserAttendanceHistory
 import app.discord.user.entity.User
 import app.discord.user.repository.UserRepository
 import org.springframework.stereotype.Service
-import java.time.OffsetDateTime
 
 @Service
 class UserServiceImpl(
@@ -16,7 +14,7 @@ class UserServiceImpl(
         val user: User? = userRepository.findUser(userIdentifier = userRegisterEvent.userIdentifier)
 
         if(User.isNewUser(user)){
-            val registerUser = this.toDomainEntity(
+            val registerUser = User(
                 userIdentifier = userRegisterEvent.userIdentifier,
                 userName = userRegisterEvent.userName,
                 globalName = userRegisterEvent.globalName,
@@ -26,20 +24,18 @@ class UserServiceImpl(
                 isBan = false,
                 userAttendanceHistory = emptyMap()
             )
-            userRepository.insertUser(user = registerUser)
+
+            userRepository.insertUser(registerUser)
         }
         else TODO()
     }
 
-    override fun updateUser(userUpdateEvent: UserUpdateEvent) {
+    override fun updateUserInfo(userUpdateEvent: UserUpdateEvent) {
         val user: User = userRepository.findUserWithNullException(userIdentifier = userUpdateEvent.userIdentifier)
-        val updateUser = this.toDomainEntity(
-            userIdentifier = userUpdateEvent.userIdentifier,
+        val updateUser = user.updateUserInfo(
             userName = userUpdateEvent.userName,
             globalName = user.globalName,
-            nickname = userUpdateEvent.nickname,
-            registerTime = user.registerTime,
-            leaveTime = user.leaveTime
+            nickname = userUpdateEvent.nickname
         )
 
         userRepository.updateUser(user = updateUser)
@@ -47,49 +43,15 @@ class UserServiceImpl(
 
     override fun updateUserNickname(userNickNameChangedEvent: NickNameChangedEvent) {
         val user: User = userRepository.findUserWithNullException(userIdentifier = userNickNameChangedEvent.userIdentifier)
-        val updateUser = this.toDomainEntity(
-            userIdentifier = user.userIdentifier,
-            userName = user.userName,
-            globalName = user.globalName,
-            nickname = userNickNameChangedEvent.nickname,
-            registerTime = user.registerTime,
-            leaveTime = user.leaveTime
-        )
-        userRepository.updateUser(user = updateUser)
+        val nickNameChangedUser = user.updateUserInfo(nickname = userNickNameChangedEvent.nickname)
+
+        userRepository.updateUser(user = nickNameChangedUser)
     }
 
     override fun leaveUser(guildMemberLeaveEvent: GuildMemberLeaveEvent) {
         val user: User = userRepository.findUserWithNullException(userIdentifier = guildMemberLeaveEvent.userIdentifier)
-        val leavedUser = this.toDomainEntity(
-            userIdentifier = user.userIdentifier,
-            userName = user.userName,
-            globalName = user.globalName,
-            nickname = user.nickname,
-            registerTime = user.registerTime,
-            leaveTime = guildMemberLeaveEvent.leaveTime
-        )
+        val leavedUser = user.leaveUser(leaveTime = guildMemberLeaveEvent.leaveTime)
+
         userRepository.updateUser(user = leavedUser)
     }
-
-    private fun toDomainEntity(
-        userIdentifier: UserIdentifier,
-        userName: String,
-        globalName: String,
-        nickname: String,
-        registerTime: OffsetDateTime,
-        leaveTime: OffsetDateTime,
-        isBan: Boolean = false,
-        userAttendanceHistory: Map<UserIdentifier, UserAttendanceHistory> = emptyMap()
-    ) =
-        User(
-            userIdentifier = userIdentifier,
-            userName = userName,
-            globalName = globalName,
-            nickname = nickname,
-            registerTime = registerTime,
-            leaveTime = leaveTime,
-            isBan = isBan,
-            userAttendanceHistory = userAttendanceHistory
-        )
-
 }
