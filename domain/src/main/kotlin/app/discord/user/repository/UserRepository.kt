@@ -8,6 +8,6 @@ interface UserRepository {
 
     fun findUser(userIdentifier: UserIdentifier): User?
     fun findUserWithNullException(userIdentifier: UserIdentifier): User
-    fun insertUser(user: User)
-    fun updateUser(user: User)
+    fun insertUser(user: User): User
+    fun updateUser(user: User): User
 }

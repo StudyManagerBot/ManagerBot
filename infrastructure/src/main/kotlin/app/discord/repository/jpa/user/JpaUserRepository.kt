@@ -47,11 +47,41 @@ class JpaUserRepository(
         if(userEntity != null) {
             return this.toDomainEntity(userEntity, jpaAttendanceHistories)
         }
-        else{throw NullPointerException("")} //FIXME
+        else{throw NullPointerException("no have user")}
     }
 
-    override fun insertUser(user: User) {
-        val userEntity = UserEntity(
+    override fun insertUser(user: User): User{
+        val userEntity = toJpaEntity(user)
+        jpaUserEntityRepository.save(userEntity)
+
+        val userEntityIdentifier = UserEntityIdentifier(
+            guildId = user.userIdentifier.guildId,
+            userId = user.userIdentifier.userId
+        )
+        val jpaAttendanceHistories =
+            jpaAttendanceHistoryRepository.findAllByUserIdentifier(userEntityIdentifier = userEntityIdentifier)
+
+        return toDomainEntity(entity = userEntity, jpaAttendanceHistories = jpaAttendanceHistories)
+    }
+
+
+    override fun updateUser(user: User): User {
+        val userEntity = toJpaEntity(user)
+        jpaUserEntityRepository.save(userEntity)
+
+        val userEntityIdentifier = UserEntityIdentifier(
+            guildId = user.userIdentifier.guildId,
+            userId = user.userIdentifier.userId
+        )
+        val jpaAttendanceHistories =
+            jpaAttendanceHistoryRepository.findAllByUserIdentifier(userEntityIdentifier = userEntityIdentifier)
+
+        return toDomainEntity(entity = userEntity, jpaAttendanceHistories = jpaAttendanceHistories)
+
+    }
+
+    private fun toJpaEntity(user: User)=
+        UserEntity(
             guildId = user.userIdentifier.guildId,
             userId = user.userIdentifier.userId,
             username = user.userName,
@@ -61,23 +91,6 @@ class JpaUserRepository(
             registerTime = user.registerTime,
             leaveTime = user.leaveTime
         )
-        jpaUserEntityRepository.save(userEntity)
-    }
-
-    override fun updateUser(user: User) {
-        //1 조회
-        val userEntity = UserEntity(
-            guildId = user.userIdentifier.guildId,
-            userId = user.userIdentifier.userId,
-            username = user.userName,
-            globalName = user.globalName,
-            nickname = user.nickname,
-            isBan = user.isBan,
-            registerTime = user.registerTime,
-            leaveTime = user.leaveTime
-        )
-        jpaUserEntityRepository.save(userEntity)
-    }
 
 
     private fun toDomainEntity(entity: UserEntity, jpaAttendanceHistories: List<JpaAttendanceHistoryEntity>): User {
