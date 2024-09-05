@@ -4,7 +4,9 @@ import java.time.OffsetDateTime
 
 data class UserRegisterEvent(
     val userIdentifier: UserIdentifier,
-    val username: String,
+    val userName: String,
     val globalName: String,
-    val registerTime: OffsetDateTime
+    val nickname: String,
+    val registerTime: OffsetDateTime,
+    val leaveTime: OffsetDateTime,
 )
