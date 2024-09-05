@@ -2,6 +2,6 @@ package app.discord.user.dto
 
 data class UserUpdateEvent(
     val userIdentifier: UserIdentifier,
-    val name: String,
+    val userName: String,
     val nickname: String
 )
