@@ -10,6 +10,8 @@ dependencies {
     implementation(project(":domain"))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("net.dv8tion:JDA:${rootProject.extra.get("jdaVersion")}")
+    testImplementation(testFixtures( project(":domain")))
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     //Springboot starter jpa
     api("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -17,6 +19,7 @@ dependencies {
     runtimeOnly("com.h2database:h2")
     //MariaDB
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+
 }
 
 allOpen {

@@ -2,8 +2,6 @@ package app.discord.repository.jpa.user.schema
 
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.TimeZoneStorage
-import org.hibernate.annotations.TimeZoneStorageType
 import java.time.OffsetDateTime
 
 @Entity(name = "Users")
@@ -31,11 +29,11 @@ class UserEntity(
     var isBan: Boolean,
 
     @field: CreationTimestamp
-    @field: TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     @field: Column(name = "CREATED_TIME")
     var registerTime: OffsetDateTime,
 
     @field: Column(name = "LEAVE_TIME")
-    @field: TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     var leaveTime: OffsetDateTime
+
+    //TODO Setter 막을것.
 )
