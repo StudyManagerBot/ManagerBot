@@ -22,7 +22,7 @@ internal class Attendance(
                     attendanceDates = listOf(
                         UserAttendance(
                             attendanceTime = serverMemberJoinEvent.joinTime,
-                            date = serverMemberJoinEvent.joinTime,
+                            date = serverMemberJoinEvent.joinTime.toLocalDate(),
                             exitTime = null
                         )
                     )

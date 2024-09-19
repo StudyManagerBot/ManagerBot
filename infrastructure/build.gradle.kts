@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":domain"))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("net.dv8tion:JDA:${rootProject.extra.get("jdaVersion")}")
+    testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
 
     //Springboot starter jpa
     api("org.springframework.boot:spring-boot-starter-data-jpa")

@@ -12,7 +12,7 @@ internal class AttendanceHistory(
 
     private fun classifyByDate(attendanceHistories: UserAttendanceHistory): MutableMap<LocalDate, MutableList<TimePeriod>>
     = attendanceHistories.attendanceDates.groupBy(
-        { it.date.toLocalDate() },
+        { it.date },
         { TimePeriod(it.attendanceTime, it.exitTime) }
     ).mapValues { map ->
         map.value.sortedBy { it.startTime }.toMutableList()
@@ -27,7 +27,6 @@ internal class AttendanceHistory(
 
     private fun checkAttendanceStartTime(startTime: OffsetDateTime, timePeriods: MutableList<TimePeriod>): AttendanceResult{
         val lastPeriod = timePeriods.lastOrNull()
-        println(this.histories)
         if(lastPeriod != null && lastPeriod.endTime == null) {
             return AttendanceResult(
                 status = AttendanceStatus.FAILURE,
