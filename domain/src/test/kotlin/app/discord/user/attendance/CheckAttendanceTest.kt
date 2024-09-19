@@ -16,7 +16,7 @@ class CheckAttendanceTest : BehaviorSpec({
         val attendance = Attendance(histories = histories)
 
         `when`("do attendance"){
-            val attendanceResult = attendance.updateAttendance(serverMemberJoinEvent = serverMemberJoinEvent)
+            val attendanceResult = attendance.checkAttendance(serverMemberJoinEvent = serverMemberJoinEvent)
             then("successfully works"){
                 attendanceResult.status shouldBe AttendanceStatus.IN_PROGRESS
                 attendanceResult.attendanceFailedReason shouldBe null
@@ -37,7 +37,7 @@ class CheckAttendanceTest : BehaviorSpec({
         val attendance = Attendance(histories = histories)
 
         `when`("do attendance"){
-            val duplicateAttendanceResult = attendance.updateAttendance(serverMemberJoinEvent = serverMemberJoinEvent)
+            val duplicateAttendanceResult = attendance.checkAttendance(serverMemberJoinEvent = serverMemberJoinEvent)
             then("failed cause duplicate attendance detected"){
                 duplicateAttendanceResult.status shouldBe AttendanceStatus.FAILURE
                 duplicateAttendanceResult.attendanceFailedReason shouldNotBe null

@@ -8,4 +8,7 @@ data class TimePeriod(
     val endTime: OffsetDateTime?,
 ){
     val duration = if( endTime != null ) Duration.between(startTime, endTime) else Duration.ZERO
+
+    fun checkEndTime(endTime: OffsetDateTime) =
+        TimePeriod(startTime = this.startTime, endTime = endTime)
 }

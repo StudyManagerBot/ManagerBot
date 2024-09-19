@@ -1,11 +1,11 @@
 package app.discord.user.dto.attendance
 
 import java.time.Duration
-import java.time.OffsetDateTime
+import java.time.LocalDate
 
 data class AttendanceResult(
     val status: AttendanceStatus,
-    val date: OffsetDateTime,
+    val date: LocalDate,
     val timePeriod: TimePeriod,
     //Today's total attendance counts
     val totalAttendanceCount: Int,

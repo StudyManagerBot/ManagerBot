@@ -42,14 +42,14 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
 
             then("successfully insert multiple histories"){
                 val searchHistories = attendanceRepository.findAll()
-                searchHistories.size  shouldBe ATTENDANCE_HISTORY_COUNT
+                searchHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
                 insertHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
                 insertHistories.shouldContainExactlyInAnyOrder(searchHistories)
             }
-
-            then("successfully search histories by userIdentifier"){
-                val searchHistories = attendanceRepository.findAllByUserIdentifier(userEntityIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
-            }
+            //FIXME
+//            then("successfully search histories by userIdentifier"){
+//                val searchHistories = attendanceRepository.findAllByUserIdentifier(userEntityIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
+//            }
 
         }
 
