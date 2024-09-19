@@ -15,7 +15,7 @@ class AttendanceDomainBuilder private constructor() {
             val now = OffsetDateTime.now()
             val attendanceDates: List<UserAttendance> = listOf(
                 UserAttendance(
-                    date = now,
+                    date = now.toLocalDate(),
                     attendanceTime = now,
                     exitTime = null
                 )
