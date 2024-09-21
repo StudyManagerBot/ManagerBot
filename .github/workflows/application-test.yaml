@@ -8,6 +8,7 @@ on:
       - "domain/**"
       - "infrastructure/**"
       - "*.gradle.kts"
+      - ".github/workflows/**"
 
 permissions:
   contents: read
@@ -38,4 +39,4 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Test all
-        run: ./gradlew clean :application:test domain:test infrastructure:test
+        run: ./gradlew clean test

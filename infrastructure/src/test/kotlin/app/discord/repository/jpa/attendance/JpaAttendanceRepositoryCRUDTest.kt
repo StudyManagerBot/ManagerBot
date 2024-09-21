@@ -3,6 +3,7 @@ package app.discord.repository.jpa.attendance
 import app.discord.jpa.JpaTest
 import app.discord.jpa.attendance.*
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
@@ -44,12 +45,15 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
                 val searchHistories = attendanceRepository.findAll()
                 searchHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
                 insertHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
-                insertHistories.shouldContainExactlyInAnyOrder(searchHistories)
+                searchHistories.shouldContainAll(insertHistories)
             }
-            //FIXME
-//            then("successfully search histories by userIdentifier"){
-//                val searchHistories = attendanceRepository.findAllByUserIdentifier(userEntityIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
-//            }
+
+            then("successfully search histories by userIdentifier"){
+                val searchHistories = attendanceRepository.findAllByUserIdentifier(userEntityIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
+                searchHistories.isNotEmpty() shouldBe true
+                searchHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
+                searchHistories.shouldContainAll(insertHistories)
+            }
 
         }
 
