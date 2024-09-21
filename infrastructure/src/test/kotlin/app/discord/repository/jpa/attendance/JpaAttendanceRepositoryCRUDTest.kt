@@ -3,8 +3,6 @@ package app.discord.repository.jpa.attendance
 import app.discord.jpa.JpaTest
 import app.discord.jpa.attendance.*
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.collections.shouldContainAll
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
@@ -45,14 +43,14 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
                 val searchHistories = attendanceRepository.findAll()
                 searchHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
                 insertHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
-                searchHistories.shouldContainAll(insertHistories)
+                ( insertHistories isSameAll searchHistories ) shouldBeEqual true
             }
 
             then("successfully search histories by userIdentifier"){
                 val searchHistories = attendanceRepository.findAllByUserIdentifier(userEntityIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
                 searchHistories.isNotEmpty() shouldBe true
                 searchHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
-                searchHistories.shouldContainAll(insertHistories)
+                ( insertHistories isSameAll searchHistories ) shouldBeEqual true
             }
 
         }
@@ -66,7 +64,7 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
                 val searchHistory = attendanceRepository.findById(updateHistory.id)
                 searchHistory.isPresent shouldBeEqual true
                 searchHistory.get().id shouldBe updateHistory.id
-                searchHistory.get().exitTime shouldBe updateHistory.exitTime
+                ( searchHistory.get().exitTime == updateHistory.exitTime ) shouldBeEqual true
             }
         }
 

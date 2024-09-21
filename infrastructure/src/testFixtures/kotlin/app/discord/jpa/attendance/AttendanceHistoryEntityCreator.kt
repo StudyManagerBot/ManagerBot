@@ -39,3 +39,6 @@ fun JpaAttendanceHistoryEntity.change(
         attendanceTime = attendanceTime ?: this.attendanceTime,
         exitTime = exitTime ?: this.exitTime
     )
+
+infix fun Collection<JpaAttendanceHistoryEntity>.isSameAll(others: Collection<JpaAttendanceHistoryEntity>): Boolean
+= this.sortedBy { it.id }.zip(others.sortedBy { it.id }).all { it.first == it.second }
