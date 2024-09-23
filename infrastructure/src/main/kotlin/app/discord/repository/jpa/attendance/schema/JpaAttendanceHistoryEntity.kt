@@ -3,6 +3,8 @@ package app.discord.repository.jpa.attendance.schema
 import jakarta.persistence.*
 import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 
 @Entity(name = "histories")
 class JpaAttendanceHistoryEntity(
@@ -23,14 +25,14 @@ class JpaAttendanceHistoryEntity(
     @field:Column(name = "EXIT_TIME")
     val exitTime: OffsetDateTime?
 ){
+    private val tolerance = 1L
     override fun equals(other: Any?): Boolean
         = other is JpaAttendanceHistoryEntity &&
             id == other.id &&
             userIdentifier == other.userIdentifier &&
             date == other.date &&
-            attendanceTime.toLocalDateTime() == other.attendanceTime.toLocalDateTime() &&
-            exitTime?.toLocalDateTime() == other.exitTime?.toLocalDateTime()
-
+            this.isEqualOffsetDateTime(attendanceTime, other.attendanceTime) &&
+            this.isEqualOffsetDateTime(exitTime, other.exitTime)
 
     override fun hashCode(): Int {
         var result = id.hashCode()
@@ -39,5 +41,10 @@ class JpaAttendanceHistoryEntity(
         result = 31 * result + attendanceTime.hashCode()
         result = 31 * result + (exitTime?.hashCode() ?: 0)
         return result
+    }
+
+    fun isEqualOffsetDateTime(target: OffsetDateTime?, other: OffsetDateTime?): Boolean{
+        val timeDifference = ChronoUnit.SECONDS.between(target, other)
+        return timeDifference.absoluteValue <= tolerance
     }
 }
