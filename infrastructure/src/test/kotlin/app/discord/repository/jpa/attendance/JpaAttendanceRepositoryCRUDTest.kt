@@ -63,7 +63,8 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
                 val searchHistory = attendanceRepository.findById(updateHistory.id)
                 searchHistory.isPresent shouldBeEqual true
                 searchHistory.get().id shouldBe updateHistory.id
-                ( searchHistory.get().exitTime == updateHistory.exitTime ) shouldBeEqual true
+                searchHistory.get().userIdentifier shouldBe updateHistory.userIdentifier
+                ( searchHistory.get().exitTime!!.toLocalDateTime().isEqual(updateHistory.exitTime!!.toLocalDateTime()) ) shouldBeEqual true
             }
         }
 
