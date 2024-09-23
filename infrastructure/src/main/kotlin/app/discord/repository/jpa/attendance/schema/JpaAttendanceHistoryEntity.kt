@@ -23,18 +23,14 @@ class JpaAttendanceHistoryEntity(
     @field:Column(name = "EXIT_TIME")
     val exitTime: OffsetDateTime?
 ){
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is JpaAttendanceHistoryEntity) return false
+    override fun equals(other: Any?): Boolean
+        = other is JpaAttendanceHistoryEntity &&
+            id == other.id &&
+            userIdentifier == other.userIdentifier &&
+            date == other.date &&
+            attendanceTime.toLocalDateTime() == other.attendanceTime.toLocalDateTime() &&
+            exitTime?.toLocalDateTime() == other.exitTime?.toLocalDateTime()
 
-        if (id != other.id) return false
-        if (userIdentifier != other.userIdentifier) return false
-        if (date != other.date) return false
-        if (attendanceTime != other.attendanceTime) return false
-        if (exitTime != other.exitTime) return false
-
-        return true
-    }
 
     override fun hashCode(): Int {
         var result = id.hashCode()

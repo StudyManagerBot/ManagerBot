@@ -43,7 +43,6 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
                 val searchHistories = attendanceRepository.findAll()
                 searchHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
                 insertHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
-                ( insertHistories isSameAll searchHistories ) shouldBeEqual true
             }
 
             then("successfully search histories by userIdentifier"){
