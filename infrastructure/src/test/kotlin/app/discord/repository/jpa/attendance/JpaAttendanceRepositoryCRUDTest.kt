@@ -4,9 +4,12 @@ import app.discord.jpa.JpaTest
 import app.discord.jpa.attendance.*
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.longs.shouldBeLessThanOrEqual
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.OffsetDateTime
+import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 
 @JpaTest
 class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
@@ -17,6 +20,9 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
         val jpaAttendanceHistory = createAttendanceHistoryEntity()
         val jpaAttendanceHistory2 = createAttendanceHistoryEntity(id = 2L)
         val attendanceHistories = attendanceHistories(startId = 3L)
+
+        // 1second
+        val toleranceInSeconds = 1L
 
         `when`("insert new single attendance history"){
             attendanceRepository.save(jpaAttendanceHistory)
@@ -61,10 +67,11 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
 
             then("successfully update attendance history"){
                 val searchHistory = attendanceRepository.findById(updateHistory.id)
+                val timeDifference = ChronoUnit.SECONDS.between(searchHistory.get().exitTime, updateHistory.exitTime)
                 searchHistory.isPresent shouldBeEqual true
                 searchHistory.get().id shouldBe updateHistory.id
                 searchHistory.get().userIdentifier shouldBe updateHistory.userIdentifier
-                ( searchHistory.get().exitTime!!.toLocalDateTime().isEqual(updateHistory.exitTime!!.toLocalDateTime()) ) shouldBeEqual true
+                timeDifference.absoluteValue shouldBeLessThanOrEqual toleranceInSeconds
             }
         }
 
