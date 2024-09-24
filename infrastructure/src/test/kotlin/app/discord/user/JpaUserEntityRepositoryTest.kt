@@ -16,8 +16,8 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
     private val repository: JpaUserEntityRepository
 ): BehaviorSpec({
     val testUser = JpaUserEntityBuilder.validUser()
-    repository.save(testUser)
 
+    repository.save(testUser)
 
     given("guilId, userId를 기준으로 유저를 조회할때"){
         `when`("유저정보를 정상적으로 불러오면"){
@@ -69,6 +69,27 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
             val foundUser = repository.findByGuildIdAndUserId("nonExistentGuildId", "nonExistentUserId")
             then("유저 정보가 null이다.") {
                 foundUser shouldBe null
+            }
+        }
+    }
+
+    given("유저가 서버에서 탈퇴할 때"){
+        `when`("유저가 올바른 유저라면"){
+            then("유저를 탈퇴시킨다."){
+                val leavedUser = JpaUserEntityBuilder.leavedUser(
+                    userEntity = testUser
+                )
+                repository.save(leavedUser)
+
+                val updatedUser = repository.findByGuildIdAndUserId("testGuildId", "testUserId")
+
+                leavedUser.id shouldBe testUser.id
+                leavedUser.leaveTime shouldNotBe testUser.leaveTime
+
+                updatedUser shouldNotBe null
+                updatedUser?.id shouldBe testUser.id
+                updatedUser?.leaveTime shouldBe leavedUser.leaveTime
+
             }
         }
     }

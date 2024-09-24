@@ -36,6 +36,21 @@ class JpaUserEntityBuilder private constructor() {
             registerTime = OffsetDateTime.now(),
             leaveTime = OffsetDateTime.MIN,
         )
+
+        fun leavedUser(
+            userEntity: UserEntity,
+            leaveTime: OffsetDateTime = OffsetDateTime.now()
+        )= UserEntity(
+            id = userEntity.id,
+            guildId = userEntity.guildId,
+            userId = userEntity.userId,
+            username = userEntity.username,
+            globalName = userEntity.globalName,
+            nickname = userEntity.nickname,
+            isBan = userEntity.isBan,
+            registerTime = userEntity.registerTime,
+            leaveTime = leaveTime
+        )
     }
 
 }

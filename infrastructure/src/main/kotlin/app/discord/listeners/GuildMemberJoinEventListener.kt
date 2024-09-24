@@ -5,7 +5,6 @@ import app.discord.user.dto.UserRegisterEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import org.springframework.context.ApplicationEventPublisher
 import java.time.OffsetDateTime
-import java.time.ZoneOffset
 
 @DiscordEventHandler
 class GuildMemberJoinEventListener(

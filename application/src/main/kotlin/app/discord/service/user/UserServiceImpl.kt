@@ -28,7 +28,7 @@ class UserServiceImpl(
             userRepository.insertUser(registerUser)
             return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
         }
-        else TODO()
+        else TODO("기존 유저인 경우 create 시간을 업데이트, leave time을 min으로 수정하여야함.")
     }
 
     override fun updateUserInfo(userUpdateEvent: UserUpdateEvent): UserResult {
@@ -57,5 +57,9 @@ class UserServiceImpl(
 
         userRepository.updateUser(user = leavedUser)
         return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
+    }
+
+    override fun registerGuildMembers(registerGuildMembers: List<UserRegisterEvent>) {
+        TODO("모든 길드 멤버들을 등록하여야함.")
     }
 }

@@ -51,7 +51,7 @@ class JpaUserRepository(
     }
 
     override fun insertUser(user: User): User{
-        val userEntity = toJpaEntity(user)
+        val userEntity = toJpaEntity(user = user)
         jpaUserEntityRepository.save(userEntity)
 
         val userEntityIdentifier = UserEntityIdentifier(
@@ -66,7 +66,9 @@ class JpaUserRepository(
 
 
     override fun updateUser(user: User): User {
-        val userEntity = toJpaEntity(user)
+        val nowUser = jpaUserEntityRepository.findByGuildIdAndUserId(guildId = user.userIdentifier.guildId, userId = user.userIdentifier.userId)
+            ?: throw IllegalArgumentException("no user")
+        val userEntity = toJpaEntity(user = user, id = nowUser.id)
         jpaUserEntityRepository.save(userEntity)
 
         val userEntityIdentifier = UserEntityIdentifier(
@@ -80,8 +82,9 @@ class JpaUserRepository(
 
     }
 
-    private fun toJpaEntity(user: User)=
+    private fun toJpaEntity(user: User, id: Long = 0L)=
         UserEntity(
+            id = id,
             guildId = user.userIdentifier.guildId,
             userId = user.userIdentifier.userId,
             username = user.userName,
@@ -93,8 +96,10 @@ class JpaUserRepository(
         )
 
 
+
     private fun toDomainEntity(entity: UserEntity, jpaAttendanceHistories: List<JpaAttendanceHistoryEntity>): User {
         val userIdentifier = UserIdentifier(guildId = entity.guildId, userId = entity.userId)
+
         val user = User(
             userIdentifier = userIdentifier,
             userName = entity.username,
@@ -104,7 +109,7 @@ class JpaUserRepository(
             leaveTime = entity.leaveTime,
             isBan = entity.isBan,
             userAttendanceHistory =
-            UserAttendanceHistoryMapper.map(jpaAttendanceHistories = jpaAttendanceHistories)
+            if (jpaAttendanceHistories.isNotEmpty()) UserAttendanceHistoryMapper.map(jpaAttendanceHistories = jpaAttendanceHistories) else mapOf()
         )
         return user
     }

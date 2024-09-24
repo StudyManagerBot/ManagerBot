@@ -8,7 +8,7 @@ import java.time.OffsetDateTime
 class UserEntity(
     @field: Id
     @field: GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    val id: Long = 0L,
 
     @field: Column(name = "GUILD_ID", nullable = false)
     val guildId: String,
@@ -35,4 +35,13 @@ class UserEntity(
     @field: Column(name = "LEAVE_TIME")
     val leaveTime: OffsetDateTime
 
-)
+)  {
+    override fun equals(other: Any?): Boolean {
+
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+}
