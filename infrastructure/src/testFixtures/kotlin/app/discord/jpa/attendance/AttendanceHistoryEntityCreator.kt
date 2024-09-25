@@ -2,15 +2,15 @@ package app.discord.jpa.attendance
 
 import app.discord.repository.jpa.attendance.schema.JpaAttendanceHistoryEntity
 import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
+import app.discord.user.DEFAULT_GUILD_ID
+import app.discord.user.DEFAULT_USER_ID
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.util.*
 
+
 const val ATTENDANCE_HISTORY_COUNT = 10
-const val DEFAULT_GUILD_ID = "testGuildId"
-const val DEFAULT_USER_ID = "testUserId"
-val DEFAULT_USER_ENTITY_IDENTIFIER = UserEntityIdentifier(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
 
 fun createAttendanceHistoryEntity(id: Long = 1L, guildId: String = DEFAULT_GUILD_ID,
                                   userId: String = DEFAULT_USER_ID) = JpaAttendanceHistoryEntity(

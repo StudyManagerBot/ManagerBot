@@ -1,8 +1,10 @@
 package app.discord.user
 
+import app.discord.jpa.isSame
 import app.discord.repository.jpa.user.JpaUserEntityRepository
 import app.discord.repository.jpa.user.schema.UserEntity
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,12 +19,12 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
     private val repository: JpaUserEntityRepository
 ): BehaviorSpec({
     val testUser = JpaUserEntityBuilder.validUser()
-
+    val updateGlobalName = "updateUserName"
     repository.save(testUser)
 
     given("guilId, userId를 기준으로 유저를 조회할때"){
         `when`("유저정보를 정상적으로 불러오면"){
-            val foundUser = repository.findByGuildIdAndUserId("testGuildId", "testUserId")
+            val foundUser = repository.findByGuildIdAndUserId(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
             then("유저 정보를 return한다."){
                 foundUser shouldNotBe null
                 foundUser?.id shouldBe  testUser.id
@@ -46,16 +48,17 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
     }
 
     given("유저정보를 업데이트를 시도할때"){
-        val tryUpdateUser = JpaUserEntityBuilder.updateUser(
-            id = testUser.id
+        val tryUpdateUser = testUser.change(
+            globalName = updateGlobalName,
+            registerTime = OffsetDateTime.now().plusHours(1)
         )
         repository.save(tryUpdateUser)
 
-        val updatedUser = repository.findByGuildIdAndUserId("testGuildId", "testUserId")
+        val updatedUser = repository.findByGuildIdAndUserId(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
         then("유저 정보가 업데이트 된다.") {
             updatedUser shouldNotBe null
             updatedUser?.id shouldBe testUser.id
-            updatedUser?.registerTime shouldNotBe testUser.registerTime
+            (updatedUser?.registerTime isSame testUser.registerTime) shouldBeEqual false
 
             updatedUser?.guildId shouldBe tryUpdateUser.guildId
             updatedUser?.userId shouldBe tryUpdateUser.userId
@@ -63,7 +66,7 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
             updatedUser?.globalName shouldBe tryUpdateUser.globalName
             updatedUser?.nickname shouldBe tryUpdateUser.nickname
             updatedUser?.isBan shouldBe tryUpdateUser.isBan
-            updatedUser?.registerTime shouldBe tryUpdateUser.registerTime
+            (updatedUser?.registerTime isSame tryUpdateUser.registerTime) shouldBeEqual true
         }
 
         `when`("업데이트할 유저가 없다면"){
@@ -82,14 +85,14 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
                 )
                 repository.save(leavedUser)
 
-                val updatedUser = repository.findByGuildIdAndUserId("testGuildId", "testUserId")
+                val updatedUser = repository.findByGuildIdAndUserId(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
 
                 leavedUser.id shouldBe testUser.id
-                leavedUser.leaveTime shouldNotBe testUser.leaveTime
+                (leavedUser.leaveTime isSame testUser.leaveTime) shouldBeEqual false
 
                 updatedUser shouldNotBe null
                 updatedUser?.id shouldBe testUser.id
-                updatedUser?.leaveTime shouldBe leavedUser.leaveTime
+                (updatedUser?.leaveTime isSame leavedUser.leaveTime) shouldBeEqual true
 
             }
         }
@@ -107,7 +110,6 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
 
                 deletedMembers.size shouldBe 0
                 testUser shouldNotBe null
-
             }
         }
     }
