@@ -1,0 +1,53 @@
+name: Integration-Test-All
+on:
+  push:
+    branches:
+      - "feat/**"
+    paths:
+      - "application/**"
+      - "domain/**"
+      - "infrastructure/**"
+      - "*.gradle.kts"
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            application:
+              - 'application/**'
+            domain:
+              - 'domain/**'
+            infrastructure:
+              - 'infrastructure/**'
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Test all
+        run: ./gradlew clean test
+
+      - name: Bundle the build report
+        if: failure()
+        run: find . -type d -name 'reports' | zip -@ -r build-reports.zip
+
+      - name: Upload the build report
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: error-report
+          path: build-reports.zip

@@ -25,6 +25,7 @@ class JDAConfiguration(
     @ConditionalOnMissingBean(JDA::class)
     fun jda(jdaInstance: JDAInstance, eventListenerAdapter: EventListenerAdapter) : JDA{
         eventListenerAdapter.addListeners(jdaInstance = jdaInstance)
+        eventListenerAdapter.addSlashCommands(jdaInstance = jdaInstance)
         return jdaInstance.jda
     }
 
