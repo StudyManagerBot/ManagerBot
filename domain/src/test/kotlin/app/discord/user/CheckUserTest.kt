@@ -7,9 +7,15 @@ import io.kotest.matchers.shouldBe
 
 class CheckUserTest : BehaviorSpec({
 
-    given("올바른 유저가 주어졌을 때") {
-        val user = UserDomainBuilder.validUser()
 
+    given("올바른 유저가") {
+        `when`("첫 가입을 시도하면"){
+            then("해당 유저 도메인이 생성된다."){
+                //TODO(테스트 코드 추가할것.)
+            }
+        }
+
+        val user = UserDomainBuilder.validUser()
         `when`("올바른 유저정보를 업데이트하면"){
             val updatedUserName = "testUName"
             val updatedGlobalName = "testGName"
@@ -56,6 +62,5 @@ class CheckUserTest : BehaviorSpec({
         }
 
     }
-
 
 })

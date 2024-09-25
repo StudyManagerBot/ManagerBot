@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface JpaUserEntityRepository: JpaRepository<UserEntity, Long>{
+    fun findAllByGuildId(guildId: String): List<UserEntity>
     fun findByGuildIdAndUserId(guildId:String, userId:String): UserEntity?
 }

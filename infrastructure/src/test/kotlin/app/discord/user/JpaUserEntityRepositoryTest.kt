@@ -1,6 +1,7 @@
 package app.discord.user
 
 import app.discord.repository.jpa.user.JpaUserEntityRepository
+import app.discord.repository.jpa.user.schema.UserEntity
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -89,6 +90,23 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
                 updatedUser shouldNotBe null
                 updatedUser?.id shouldBe testUser.id
                 updatedUser?.leaveTime shouldBe leavedUser.leaveTime
+
+            }
+        }
+    }
+
+    given("1개의 길드의 모든 멤버 정보를 삭제할 때"){
+        val userToDelete = JpaUserEntityBuilder.validUser(guildId = "deletedGuildId")
+        repository.save(userToDelete)
+        `when`("guildId가 있다면"){
+            then("해당 길드 유저 정보를 모두 지운다."){
+                val membersToDelete:List<UserEntity> = repository.findAllByGuildId(guildId =  userToDelete.guildId)
+                repository.deleteAllInBatch(membersToDelete)
+
+                val deletedMembers = repository.findAllByGuildId(guildId =  userToDelete.guildId)
+
+                deletedMembers.size shouldBe 0
+                testUser shouldNotBe null
 
             }
         }

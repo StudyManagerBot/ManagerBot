@@ -32,7 +32,8 @@ class User (
 
     fun updateUserInfo(userName: String = "",
                        globalName: String = "",
-                       nickname: String = ""): User
+                       nickname: String = "",
+                       leaveTime: OffsetDateTime = this.leaveTime): User
     {
         validateCheck(userName, "user name")
         validateCheck(globalName, "global name")
@@ -44,7 +45,7 @@ class User (
             globalName = globalName.ifBlank { this.globalName },
             nickname = nickname.ifBlank { this.nickname },
             registerTime = this.registerTime,
-            leaveTime = this.leaveTime,
+            leaveTime = leaveTime,
             isBan = this.isBan,
             userAttendanceHistory = userAttendanceHistory,
         )

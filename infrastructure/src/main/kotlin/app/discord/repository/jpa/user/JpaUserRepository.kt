@@ -30,6 +30,7 @@ class JpaUserRepository(
         return if(userEntity != null) this.toDomainEntity(userEntity, jpaAttendanceHistories) else null
     }
 
+
     override fun findUserWithNullException(userIdentifier: UserIdentifier): User {
         val userEntity:UserEntity? = jpaUserEntityRepository.findByGuildIdAndUserId(
             guildId = userIdentifier.guildId,
@@ -48,7 +49,9 @@ class JpaUserRepository(
             return this.toDomainEntity(userEntity, jpaAttendanceHistories)
         }
         else{throw NullPointerException("no have user")}
+
     }
+
 
     override fun insertUser(user: User): User{
         val userEntity = toJpaEntity(user = user)
@@ -82,9 +85,11 @@ class JpaUserRepository(
 
     }
 
-    override fun deleteUser() {
-        TODO("해당 유저 삭제.")
+    override fun deleteUser(userIdentifier: UserIdentifier) {
+        val members = jpaUserEntityRepository.findAllByGuildId(guildId = userIdentifier.guildId)
+        jpaUserEntityRepository.deleteAllInBatch(members)
     }
+
 
     private fun toJpaEntity(user: User, id: Long = 0L)=
         UserEntity(
@@ -98,7 +103,6 @@ class JpaUserRepository(
             registerTime = user.registerTime,
             leaveTime = user.leaveTime
         )
-
 
 
     private fun toDomainEntity(entity: UserEntity, jpaAttendanceHistories: List<JpaAttendanceHistoryEntity>): User {
