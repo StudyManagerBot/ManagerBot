@@ -9,4 +9,5 @@ interface UserService {
     fun updateUserNickname(userNickNameChangedEvent: NickNameChangedEvent): UserResult
     fun leaveUser(guildMemberLeaveEvent: GuildMemberLeaveEvent): UserResult
     fun registerGuildMembers(registerGuildMembers: List<UserRegisterEvent>)
+    fun deleteAllGuildMembers(botKickedEvent: BotKickedEvent)
 }

@@ -82,6 +82,10 @@ class JpaUserRepository(
 
     }
 
+    override fun deleteUser() {
+        TODO("해당 유저 삭제.")
+    }
+
     private fun toJpaEntity(user: User, id: Long = 0L)=
         UserEntity(
             id = id,

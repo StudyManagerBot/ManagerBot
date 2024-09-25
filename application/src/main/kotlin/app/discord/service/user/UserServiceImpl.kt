@@ -62,4 +62,9 @@ class UserServiceImpl(
     override fun registerGuildMembers(registerGuildMembers: List<UserRegisterEvent>) {
         TODO("모든 길드 멤버들을 등록하여야함.")
     }
+
+    override fun deleteAllGuildMembers(botKickedEvent: BotKickedEvent) {
+        TODO("해당 길드 id 유저 정보를 모두 삭제.")
+
+    }
 }
