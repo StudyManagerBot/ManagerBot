@@ -16,7 +16,7 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
     private val attendanceRepository: JpaAttendanceHistoryRepository
 ): BehaviorSpec({
 
-    given("attendance history"){
+    given("attendance history with exit time"){
         val jpaAttendanceHistory = createAttendanceHistoryEntity()
         val jpaAttendanceHistory2 = createAttendanceHistoryEntity(id = 2L)
         val attendanceHistories = attendanceHistories(startId = 3L)
@@ -76,5 +76,20 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
             }
         }
 
+    }
+    given("attendance history"){
+        val jpaAttendanceHistory = createAttendanceHistoryEntityWithoutExitTime()
+
+        `when`("insert new attendance history"){
+            attendanceRepository.save(jpaAttendanceHistory)
+
+            then("successfully insert new attendance history"){
+                val searchHistory = attendanceRepository.findById(jpaAttendanceHistory.id)
+                searchHistory.isPresent shouldBeEqual true
+                searchHistory.get().id shouldBe jpaAttendanceHistory.id
+                searchHistory.get().userIdentifier shouldBe jpaAttendanceHistory.userIdentifier
+                searchHistory.get().exitTime shouldBe null
+            }
+        }
     }
 })

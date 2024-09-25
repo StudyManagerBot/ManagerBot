@@ -23,8 +23,22 @@ fun createAttendanceHistoryEntity(id: Long = 1L, guildId: String = DEFAULT_GUILD
     )
 )
 
-fun attendanceHistories(startId: Long = 1L)
-= (startId until startId + ATTENDANCE_HISTORY_COUNT).map { id -> createAttendanceHistoryEntity(id = id) }
+fun createAttendanceHistoryEntityWithoutExitTime(id: Long = 1L, guildId: String = DEFAULT_GUILD_ID,
+                                                 userId: String = DEFAULT_USER_ID)
+= JpaAttendanceHistoryEntity(
+    id = id,
+    date = LocalDateTime.now().toLocalDate(),
+    attendanceTime = OffsetDateTime.now(),
+    exitTime = null,
+    userIdentifier = UserEntityIdentifier(
+        guildId = guildId,
+        userId = userId
+    )
+)
+
+fun attendanceHistories(startId: Long = 1L, isNullExit: Boolean = false)
+= if( isNullExit ) (startId until startId + ATTENDANCE_HISTORY_COUNT).map { id -> createAttendanceHistoryEntity(id = id) }
+else (startId until startId + ATTENDANCE_HISTORY_COUNT).map { id -> createAttendanceHistoryEntityWithoutExitTime(id = id) }
 
 fun JpaAttendanceHistoryEntity.change(
                             id: Long? = null,
