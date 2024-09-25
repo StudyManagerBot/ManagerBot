@@ -32,7 +32,7 @@ class JpaAttendanceHistoryEntity(
             userIdentifier == other.userIdentifier &&
             date == other.date &&
             this.isEqualOffsetDateTime(attendanceTime, other.attendanceTime) &&
-            this.isEqualOffsetDateTime(exitTime, other.exitTime)
+            this.areExitTimesEqual(exitTime = exitTime, other.exitTime)
 
     override fun hashCode(): Int {
         var result = id.hashCode()
@@ -43,7 +43,14 @@ class JpaAttendanceHistoryEntity(
         return result
     }
 
-    fun isEqualOffsetDateTime(target: OffsetDateTime?, other: OffsetDateTime?): Boolean{
+    private fun areExitTimesEqual(exitTime: OffsetDateTime?, other: OffsetDateTime?): Boolean
+    = when {
+        exitTime == null && other == null -> true
+        exitTime != null && other != null -> isEqualOffsetDateTime(exitTime, other)
+        else -> false
+    }
+
+    private fun isEqualOffsetDateTime(target: OffsetDateTime, other: OffsetDateTime): Boolean{
         val timeDifference = ChronoUnit.SECONDS.between(target, other)
         return timeDifference.absoluteValue <= tolerance
     }

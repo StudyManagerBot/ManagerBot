@@ -5,6 +5,7 @@ import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
+import java.util.*
 
 const val ATTENDANCE_HISTORY_COUNT = 10
 const val DEFAULT_GUILD_ID = "testGuildId"
@@ -37,8 +38,10 @@ fun createAttendanceHistoryEntityWithoutExitTime(id: Long = 1L, guildId: String 
 )
 
 fun attendanceHistories(startId: Long = 1L, isNullExit: Boolean = false)
-= if( isNullExit ) (startId until startId + ATTENDANCE_HISTORY_COUNT).map { id -> createAttendanceHistoryEntity(id = id) }
-else (startId until startId + ATTENDANCE_HISTORY_COUNT).map { id -> createAttendanceHistoryEntityWithoutExitTime(id = id) }
+= if( isNullExit ) (startId until startId + ATTENDANCE_HISTORY_COUNT).map { id ->
+    createAttendanceHistoryEntity(id = id, guildId = UUID.randomUUID().toString(), userId = UUID.randomUUID().toString()) }
+else (startId until startId + ATTENDANCE_HISTORY_COUNT).map {
+    id -> createAttendanceHistoryEntityWithoutExitTime(id = id, guildId = UUID.randomUUID().toString(), userId = UUID.randomUUID().toString()) }
 
 fun JpaAttendanceHistoryEntity.change(
                             id: Long? = null,

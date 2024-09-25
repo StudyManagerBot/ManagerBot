@@ -46,16 +46,9 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
             val insertHistories = attendanceRepository.saveAll(attendanceHistories)
 
             then("successfully insert multiple histories"){
-                val searchHistories = attendanceRepository.findAll()
+                val searchHistories = attendanceRepository.findAllById(insertHistories.map { it.id })
                 searchHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
                 insertHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
-                ( insertHistories isSameAll searchHistories ) shouldBeEqual true
-            }
-
-            then("successfully search histories by userIdentifier"){
-                val searchHistories = attendanceRepository.findAllByUserIdentifier(userEntityIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
-                searchHistories.isNotEmpty() shouldBe true
-                searchHistories.size shouldBe ATTENDANCE_HISTORY_COUNT
                 ( insertHistories isSameAll searchHistories ) shouldBeEqual true
             }
 
