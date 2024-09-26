@@ -1,6 +1,7 @@
 package app.discord.controllers
 
 import app.discord.service.user.UserService
+import app.discord.user.dto.BotKickedEvent
 import app.discord.user.dto.GuildMemberLeaveEvent
 import app.discord.user.dto.UserRegisterEvent
 import app.discord.user.dto.UserUpdateEvent
@@ -31,6 +32,11 @@ class DiscordEventController(
     @EventListener(GuildMemberLeaveEvent::class)
     fun guildMemberLeaveEvent(event: GuildMemberLeaveEvent) {
         userService.leaveUser(guildMemberLeaveEvent = event)
+    }
+
+    @EventListener(BotKickedEvent::class)
+    fun botKickEvent(event: BotKickedEvent) {
+        userService.deleteAllGuildMembers(botKickedEvent = event)
     }
 
 

@@ -28,7 +28,17 @@ class UserServiceImpl(
             userRepository.insertUser(registerUser)
             return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
         }
-        else TODO()
+        else {
+            val oldUser: User = userRepository.findUserWithNullException(userIdentifier = userRegisterEvent.userIdentifier)
+            oldUser.updateUserInfo(
+                userName = userRegisterEvent.userName,
+                globalName = userRegisterEvent.globalName,
+                nickname = userRegisterEvent.nickname,
+                leaveTime = userRegisterEvent.leaveTime
+            )
+            userRepository.updateUser(user = oldUser)
+            return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
+        }
     }
 
     override fun updateUserInfo(userUpdateEvent: UserUpdateEvent): UserResult {
@@ -57,5 +67,13 @@ class UserServiceImpl(
 
         userRepository.updateUser(user = leavedUser)
         return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
+    }
+
+    override fun registerGuildMembers(registerGuildMembers: List<UserRegisterEvent>) {
+        TODO("길드의 모든 멤버를 등록하여야함.")
+    }
+
+    override fun deleteAllGuildMembers(botKickedEvent: BotKickedEvent) {
+        userRepository.deleteAllMembers(guildId = botKickedEvent.guildId)
     }
 }

@@ -1,41 +1,36 @@
 package app.discord.repository.jpa.user.schema
 
+import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.TimeZoneStorage
-import org.hibernate.annotations.TimeZoneStorageType
 import java.time.OffsetDateTime
 
 @Entity(name = "Users")
 class UserEntity(
     @field: Id
     @field: GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
+    val id: Long = 0L,
 
-    @field: Column(name = "GUILD_ID", nullable = false)
-    var guildId: String,
-
-    @field: Column(name = "USER_ID", nullable = false)
-    var userId: String,
+    @field: Embedded
+    val userIdentifier: UserEntityIdentifier,
 
     @field: Column(name = "USER_NAME", nullable = false)
-    var username: String,
+    val username: String,
 
     @field: Column(name = "GLOBAL_NAME", nullable = false)
-    var globalName: String,
+    val globalName: String,
 
     @field: Column(name = "NICKNAME", nullable = false)
-    var nickname: String,
+    val nickname: String,
 
     @field: Column(name = "IS_BAN", nullable = false)
-    var isBan: Boolean,
+    val isBan: Boolean,
 
     @field: CreationTimestamp
-    @field: TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     @field: Column(name = "CREATED_TIME")
-    var registerTime: OffsetDateTime,
+    val registerTime: OffsetDateTime,
 
     @field: Column(name = "LEAVE_TIME")
-    @field: TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
-    var leaveTime: OffsetDateTime
+    val leaveTime: OffsetDateTime
+
 )
