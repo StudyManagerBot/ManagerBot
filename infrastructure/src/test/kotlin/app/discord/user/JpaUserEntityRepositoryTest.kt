@@ -116,9 +116,10 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
 //                val deletedMembers = repository.findAllByGuildId(guildId =  userToDelete.guildId)
                 val deletedMembers =
                     repository.findAllByUserIdentifierGuildId(guildId =  userToDelete.userIdentifier.guildId)
-
+                val allUsers = repository.findAll()
                 deletedMembers.size shouldBe 0
-                testUser shouldNotBe null
+                allUsers.size shouldNotBe 0
+
             }
         }
     }
