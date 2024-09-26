@@ -1,6 +1,7 @@
 package app.discord.repository.jpa.user.schema
 
 import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
+import app.discord.user.entity.UserRole
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.time.OffsetDateTime
@@ -31,6 +32,12 @@ class UserEntity(
     val registerTime: OffsetDateTime,
 
     @field: Column(name = "LEAVE_TIME")
-    val leaveTime: OffsetDateTime
+    val leaveTime: OffsetDateTime,
 
+    @field:Enumerated(EnumType.STRING)
+    @field:Column(name = "PERMISSION")
+    val permission: UserRole,
+
+    @field:Column(name = "WARNINGS")
+    val warnings: Int = 0
 )

@@ -105,14 +105,15 @@ class JpaUserRepository(
             globalName = user.globalName,
             nickname = user.nickname,
             isBan = user.isBan,
+            permission = user.role,
+            warnings = user.warnings,
             registerTime = user.registerTime,
             leaveTime = user.leaveTime
         )
 
 
-    private fun toDomainEntity(jpaEntity: UserEntity, jpaAttendanceHistories: List<JpaAttendanceHistoryEntity>): User {
-        val user = User(
-//            userIdentifier = entity.userIdentifier,
+    private fun toDomainEntity(jpaEntity: UserEntity, jpaAttendanceHistories: List<JpaAttendanceHistoryEntity>): User =
+        User(
             userIdentifier = UserIdentifier(
                 guildId = jpaEntity.userIdentifier.guildId,
                 userId = jpaEntity.userIdentifier.userId,
@@ -123,9 +124,10 @@ class JpaUserRepository(
             registerTime = jpaEntity.registerTime,
             leaveTime = jpaEntity.leaveTime,
             isBan = jpaEntity.isBan,
+            role = jpaEntity.permission,
+            warnings = jpaEntity.warnings,
             userAttendanceHistory =
             if (jpaAttendanceHistories.isNotEmpty()) UserAttendanceHistoryMapper.map(jpaAttendanceHistories = jpaAttendanceHistories) else mapOf()
         )
-        return user
-    }
+
 }

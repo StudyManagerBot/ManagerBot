@@ -2,12 +2,15 @@ package app.discord.user
 
 import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import app.discord.repository.jpa.user.schema.UserEntity
+import app.discord.user.entity.UserRole
 import java.time.OffsetDateTime
 
 const val DEFAULT_GUILD_ID = "testGuildId"
 const val DEFAULT_USER_ID = "testUserId"
 const val DEFAULT_USER_NAME = "testUsername"
 const val DEFAULT_GLOBAL_NAME = "testGlobalName"
+const val DEFAULT_WARNING_COUNT = 0
+val DEFAULT_USER_ROLE = UserRole.MEMBER
 val DEFAULT_USER_ENTITY_IDENTIFIER = UserEntityIdentifier(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
 
 
@@ -23,6 +26,8 @@ class JpaUserEntityBuilder private constructor() {
             nickname = "",
             isBan = false,
             registerTime = OffsetDateTime.now(),
+            permission = DEFAULT_USER_ROLE,
+            warnings = DEFAULT_WARNING_COUNT,
             leaveTime = OffsetDateTime.MIN,
         )
 
@@ -37,6 +42,8 @@ class JpaUserEntityBuilder private constructor() {
             globalName = userEntity.globalName,
             nickname = userEntity.nickname,
             isBan = userEntity.isBan,
+            permission = DEFAULT_USER_ROLE,
+            warnings = DEFAULT_WARNING_COUNT,
             registerTime = userEntity.registerTime,
             leaveTime = leaveTime
         )
@@ -50,6 +57,8 @@ fun UserEntity.change(
     globalName: String = this.globalName,
     nickname: String = this.nickname,
     isBan: Boolean = this.isBan,
+    permission: UserRole = this.permission,
+    warnings: Int = this.warnings,
     registerTime: OffsetDateTime = this.registerTime,
     leaveTime: OffsetDateTime = this.leaveTime
 ) = UserEntity(
@@ -59,6 +68,8 @@ fun UserEntity.change(
     globalName = globalName,
     nickname = nickname,
     isBan = isBan,
+    permission = permission,
+    warnings = warnings,
     registerTime = registerTime,
     leaveTime = leaveTime
 )

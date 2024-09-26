@@ -13,6 +13,8 @@ class User (
     val registerTime: OffsetDateTime,
     val leaveTime: OffsetDateTime,
     val isBan: Boolean,
+    val role: UserRole = UserRole.MEMBER,
+    val warnings: Int = 0,
     private val userAttendanceHistory: Map<UserIdentifier, UserAttendanceHistory>
 ){
     private val attendance: Attendance = Attendance(histories = this.userAttendanceHistory)
@@ -44,6 +46,8 @@ class User (
             registerTime = this.registerTime,
             leaveTime = leaveTime,
             isBan = this.isBan,
+            role = this.role,
+            warnings = this.warnings,
             userAttendanceHistory = userAttendanceHistory,
         )
     }
@@ -57,6 +61,8 @@ class User (
             registerTime = this.registerTime,
             leaveTime = leaveTime,
             isBan = this.isBan,
+            role = this.role,
+            warnings = this.warnings,
             userAttendanceHistory = userAttendanceHistory,
         )
     }
