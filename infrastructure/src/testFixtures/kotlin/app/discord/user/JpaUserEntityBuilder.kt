@@ -17,8 +17,7 @@ class JpaUserEntityBuilder private constructor() {
             guildId: String = DEFAULT_GUILD_ID,
             userId: String =  DEFAULT_USER_ID
         ) = UserEntity(
-            guildId = guildId,
-            userId = userId,
+            userIdentifier = UserEntityIdentifier(guildId = guildId, userId = userId),
             username = DEFAULT_USER_NAME,
             globalName = DEFAULT_GLOBAL_NAME,
             nickname = "",
@@ -33,8 +32,7 @@ class JpaUserEntityBuilder private constructor() {
             leaveTime: OffsetDateTime = OffsetDateTime.now()
         )= UserEntity(
             id = userEntity.id,
-            guildId = userEntity.guildId,
-            userId = userEntity.userId,
+            userIdentifier = userEntity.userIdentifier,
             username = userEntity.username,
             globalName = userEntity.globalName,
             nickname = userEntity.nickname,
@@ -47,8 +45,7 @@ class JpaUserEntityBuilder private constructor() {
 
 fun UserEntity.change(
     id: Long = this.id,
-    guildId: String = this.guildId,
-    userId: String =  this.userId,
+    userIdentifier: UserEntityIdentifier = this.userIdentifier,
     username: String = this.username,
     globalName: String = this.globalName,
     nickname: String = this.nickname,
@@ -57,8 +54,7 @@ fun UserEntity.change(
     leaveTime: OffsetDateTime = this.leaveTime
 ) = UserEntity(
     id = id,
-    guildId = guildId,
-    userId = userId,
+    userIdentifier = userIdentifier,
     username = username,
     globalName = globalName,
     nickname = nickname,

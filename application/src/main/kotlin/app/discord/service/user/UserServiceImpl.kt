@@ -31,6 +31,9 @@ class UserServiceImpl(
         else {
             val oldUser: User = userRepository.findUserWithNullException(userIdentifier = userRegisterEvent.userIdentifier)
             oldUser.updateUserInfo(
+                userName = userRegisterEvent.userName,
+                globalName = userRegisterEvent.globalName,
+                nickname = userRegisterEvent.nickname,
                 leaveTime = userRegisterEvent.leaveTime
             )
             userRepository.updateUser(user = oldUser)
@@ -71,7 +74,6 @@ class UserServiceImpl(
     }
 
     override fun deleteAllGuildMembers(botKickedEvent: BotKickedEvent) {
-        userRepository.deleteUser(UserIdentifier(guildId = botKickedEvent.guildId, userId = ""))
-
+        userRepository.deleteAllMembers(guildId = botKickedEvent.guildId)
     }
 }

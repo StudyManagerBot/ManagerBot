@@ -1,5 +1,6 @@
 package app.discord.repository.jpa.user.schema
 
+import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.time.OffsetDateTime
@@ -10,11 +11,8 @@ class UserEntity(
     @field: GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 
-    @field: Column(name = "GUILD_ID", nullable = false)
-    val guildId: String,
-
-    @field: Column(name = "USER_ID", nullable = false)
-    val userId: String,
+    @field: Embedded
+    val userIdentifier: UserEntityIdentifier,
 
     @field: Column(name = "USER_NAME", nullable = false)
     val username: String,
@@ -35,13 +33,4 @@ class UserEntity(
     @field: Column(name = "LEAVE_TIME")
     val leaveTime: OffsetDateTime
 
-)  {
-    override fun equals(other: Any?): Boolean {
-
-        return super.equals(other)
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
-}
+)

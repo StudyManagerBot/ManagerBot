@@ -1,6 +1,7 @@
 package app.discord.user
 
 import app.discord.jpa.isSame
+import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import app.discord.repository.jpa.user.JpaUserEntityRepository
 import app.discord.repository.jpa.user.schema.UserEntity
 import io.kotest.core.spec.style.BehaviorSpec
@@ -24,12 +25,11 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
 
     given("guilId, userId를 기준으로 유저를 조회할때"){
         `when`("유저정보를 정상적으로 불러오면"){
-            val foundUser = repository.findByGuildIdAndUserId(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
+            val foundUser = repository.findByUserIdentifier(userIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
             then("유저 정보를 return한다."){
                 foundUser shouldNotBe null
                 foundUser?.id shouldBe  testUser.id
-                foundUser?.guildId shouldBe testUser.guildId
-                foundUser?.userId shouldBe testUser.userId
+                foundUser?.userIdentifier shouldBe testUser.userIdentifier
                 foundUser?.username shouldBe testUser.username
                 foundUser?.globalName shouldBe testUser.globalName
 
@@ -40,7 +40,10 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
             }
         }
         `when`("유저 정보가 없다면"){
-            val noHaveUserInfo = repository.findByGuildIdAndUserId("00000000", "00000000")
+            val noHaveUserInfo = repository.findByUserIdentifier(userIdentifier = UserEntityIdentifier(
+                guildId = "00000000",
+                userId = "00000000"
+            ))
             then("유저 정보가 null이다."){
                 noHaveUserInfo shouldBe null
             }
@@ -54,14 +57,13 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
         )
         repository.save(tryUpdateUser)
 
-        val updatedUser = repository.findByGuildIdAndUserId(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
+        val updatedUser = repository.findByUserIdentifier(userIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
         then("유저 정보가 업데이트 된다.") {
             updatedUser shouldNotBe null
             updatedUser?.id shouldBe testUser.id
             (updatedUser?.registerTime isSame testUser.registerTime) shouldBeEqual false
 
-            updatedUser?.guildId shouldBe tryUpdateUser.guildId
-            updatedUser?.userId shouldBe tryUpdateUser.userId
+            updatedUser?.userIdentifier shouldBe tryUpdateUser.userIdentifier
             updatedUser?.username shouldBe tryUpdateUser.username
             updatedUser?.globalName shouldBe tryUpdateUser.globalName
             updatedUser?.nickname shouldBe tryUpdateUser.nickname
@@ -70,7 +72,10 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
         }
 
         `when`("업데이트할 유저가 없다면"){
-            val foundUser = repository.findByGuildIdAndUserId("nonExistentGuildId", "nonExistentUserId")
+            val foundUser = repository.findByUserIdentifier(userIdentifier = UserEntityIdentifier(
+                guildId = "nonExistentGuildId",
+                userId = "nonExistentUserId"
+            ))
             then("유저 정보가 null이다.") {
                 foundUser shouldBe null
             }
@@ -85,7 +90,7 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
                 )
                 repository.save(leavedUser)
 
-                val updatedUser = repository.findByGuildIdAndUserId(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
+                val updatedUser = repository.findByUserIdentifier(DEFAULT_USER_ENTITY_IDENTIFIER)
 
                 leavedUser.id shouldBe testUser.id
                 (leavedUser.leaveTime isSame testUser.leaveTime) shouldBeEqual false
@@ -103,10 +108,14 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
         repository.save(userToDelete)
         `when`("guildId가 있다면"){
             then("해당 길드 유저 정보를 모두 지운다."){
-                val membersToDelete:List<UserEntity> = repository.findAllByGuildId(guildId =  userToDelete.guildId)
+//                val membersToDelete:List<UserEntity> = repository.findAllByGuildId(guildId =  userToDelete.guildId)
+                val membersToDelete:List<UserEntity> =
+                    repository.findAllByUserIdentifierGuildId(guildId = userToDelete.userIdentifier.guildId)
                 repository.deleteAllInBatch(membersToDelete)
 
-                val deletedMembers = repository.findAllByGuildId(guildId =  userToDelete.guildId)
+//                val deletedMembers = repository.findAllByGuildId(guildId =  userToDelete.guildId)
+                val deletedMembers =
+                    repository.findAllByUserIdentifierGuildId(guildId =  userToDelete.userIdentifier.guildId)
 
                 deletedMembers.size shouldBe 0
                 testUser shouldNotBe null

@@ -22,9 +22,6 @@ class User (
         fun isNewUser(user: User?): Boolean {
             return user == null
         }
-        fun check(){
-
-        }
         private const val BASIC_NAME_REGEX = "^[a-zA-Z0-9\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55가-힣]+$"
         private const val ENGLISH_BAD_WORD_REGEX = "(fuck|shit|bitch|asshole|bastard|damn|crap|dick|piss|cunt|whore|slut)"
         private const val SQL_INJECTION_REGEX = "('.+--)|(--)|(%7C)|(;)|(\\b(SELECT|INSERT|UPDATE|DELETE|DROP|TRUNCATE|CREATE|ALTER|GRANT|REVOKE|UNION|ALL)\\b)"
@@ -35,9 +32,9 @@ class User (
                        nickname: String = "",
                        leaveTime: OffsetDateTime = this.leaveTime): User
     {
-        validateCheck(userName, "user name")
-        validateCheck(globalName, "global name")
-        validateCheck(nickname, "nickname")
+        validateCheck(userName, errorMessage = "Invalid user name")
+        validateCheck(globalName, errorMessage = "Invalid global name")
+        validateCheck(nickname, errorMessage = "Invalid nickname")
 
         return User(
             userIdentifier = this.userIdentifier,
@@ -64,17 +61,17 @@ class User (
         )
     }
 
-    private fun String.validate(validator: (String) -> Boolean, errorMessage: String){
-        if (!validator(this)) throw IllegalArgumentException(errorMessage)
-    }
-
-    private fun validateCheck(field: String, fieldName: String) {
+    private fun validateCheck(field: String, errorMessage: String) {
         field.validate(
             { Pattern.matches(BASIC_NAME_REGEX, it) &&
                     !Pattern.matches(ENGLISH_BAD_WORD_REGEX, it) &&
                     !Pattern.matches(SQL_INJECTION_REGEX, it) },
-            errorMessage = "Invalid $fieldName"
+            errorMessage = errorMessage
         )
+    }
+    
+    private fun String.validate(validator: (String) -> Boolean, errorMessage: String){
+        if (!validator(this)) throw IllegalArgumentException(errorMessage)
     }
 
     //TODO("attendance 진입점 추가")
