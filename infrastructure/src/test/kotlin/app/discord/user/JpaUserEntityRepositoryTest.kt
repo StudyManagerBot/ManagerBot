@@ -20,10 +20,30 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
     private val repository: JpaUserEntityRepository
 ): BehaviorSpec({
     val testUser = JpaUserEntityBuilder.validUser()
-    val updateGlobalName = "updateUserName"
     repository.save(testUser)
 
-    given("guilId, userId를 기준으로 유저를 조회할때"){
+    given("유저를 등록할 때"){
+        val registerUser = JpaUserEntityBuilder.validUser()
+        `when`("정상적인 userIdentifier를 가지고 있다면"){
+            then("유저 정보를 저장한다."){
+                repository.save(registerUser)
+                val registeredUser = repository.findByUserIdentifier(userIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
+
+                registeredUser shouldNotBe null
+                registeredUser?.id shouldBe  registerUser.id
+                registeredUser?.userIdentifier shouldBe registerUser.userIdentifier
+                registeredUser?.username shouldBe registerUser.username
+                registeredUser?.globalName shouldBe registerUser.globalName
+                registeredUser?.nickname shouldBe registerUser.nickname
+                registeredUser?.isBan shouldBe registerUser.isBan
+                registeredUser?.registerTime shouldBe registerUser.registerTime
+                registeredUser?.leaveTime shouldBe registerUser.leaveTime
+
+            }
+        }
+    }
+
+    given("guilId, userId를 가진 유저가"){
         `when`("유저정보를 정상적으로 불러오면"){
             val foundUser = repository.findByUserIdentifier(userIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
             then("유저 정보를 return한다."){
@@ -50,25 +70,28 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
         }
     }
 
-    given("유저정보를 업데이트를 시도할때"){
-        val tryUpdateUser = testUser.change(
-            globalName = updateGlobalName,
-            registerTime = OffsetDateTime.now().plusHours(1)
-        )
-        repository.save(tryUpdateUser)
+    given("이미 가입되어있는 유저가"){
+        `when`("자신의 정보를 갱신할 때"){
+            then("유저 정보가 업데이트 된다.") {
+                val tryUpdateUser = testUser.change(
+                    globalName = "updateUserName",
+                    registerTime = OffsetDateTime.now().plusHours(1)
+                )
+                repository.save(tryUpdateUser)
 
-        val updatedUser = repository.findByUserIdentifier(userIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
-        then("유저 정보가 업데이트 된다.") {
-            updatedUser shouldNotBe null
-            updatedUser?.id shouldBe testUser.id
-            (updatedUser?.registerTime isSame testUser.registerTime) shouldBeEqual false
+                val updatedUser = repository.findByUserIdentifier(userIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
 
-            updatedUser?.userIdentifier shouldBe tryUpdateUser.userIdentifier
-            updatedUser?.username shouldBe tryUpdateUser.username
-            updatedUser?.globalName shouldBe tryUpdateUser.globalName
-            updatedUser?.nickname shouldBe tryUpdateUser.nickname
-            updatedUser?.isBan shouldBe tryUpdateUser.isBan
-            (updatedUser?.registerTime isSame tryUpdateUser.registerTime) shouldBeEqual true
+                updatedUser shouldNotBe null
+                updatedUser?.id shouldBe testUser.id
+                (updatedUser?.registerTime isSame testUser.registerTime) shouldBeEqual false
+
+                updatedUser?.userIdentifier shouldBe tryUpdateUser.userIdentifier
+                updatedUser?.username shouldBe tryUpdateUser.username
+                updatedUser?.globalName shouldBe tryUpdateUser.globalName
+                updatedUser?.nickname shouldBe tryUpdateUser.nickname
+                updatedUser?.isBan shouldBe tryUpdateUser.isBan
+                (updatedUser?.registerTime isSame tryUpdateUser.registerTime) shouldBeEqual true
+            }
         }
 
         `when`("업데이트할 유저가 없다면"){

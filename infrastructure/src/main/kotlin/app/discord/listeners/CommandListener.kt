@@ -14,22 +14,22 @@ class CommandListener (
 
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
         if (event.name == ("init_users")){
-            event.guild?.members?.forEach {
+            event.guild?.members?.forEach { // FIXME(트랜잭션을 묶어서 실행하도록 변경)
                 this.applicationEventPublisher.publishEvent(
-                    this.addAllMembers(member = it)
+                    this.addMember(member = it)
                 )
             }
         }
         event.reply("초기화 완료").queue()
     }
 
-    private fun addAllMembers(member: Member) =
+    private fun addMember(member: Member) =
         UserRegisterEvent(
             userIdentifier = UserIdentifier(
                 guildId = member.guild.id,
                 userId = member.user.id
             ),
-            userName = member.user.id,
+            userName = member.user.name,
             globalName = member.user.globalName?:"",
             nickname = member.nickname?:"",
             registerTime = OffsetDateTime.now(),

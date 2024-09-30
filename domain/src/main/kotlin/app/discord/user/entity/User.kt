@@ -1,29 +1,30 @@
 package app.discord.user.entity
 
 import app.discord.user.dto.UserIdentifier
-import app.discord.user.dto.attendance.UserAttendanceHistory
+import app.discord.user.dto.attendance.*
 import java.time.OffsetDateTime
 import java.util.regex.Pattern
 
 class User (
     val userIdentifier: UserIdentifier,
-    val userName: String,
-    val globalName: String,
-    val nickname: String,
+    userName: String = "",
+    globalName: String,
+    nickname: String,
     val registerTime: OffsetDateTime,
     val leaveTime: OffsetDateTime,
     val isBan: Boolean,
     private val userAttendanceHistory: Map<UserIdentifier, UserAttendanceHistory>
 ){
+    val userName: String = userName isNotInclude Pattern.compile(SQL_INJECTION_REGEX)
+    val globalName: String = globalName isNotInclude Pattern.compile(SQL_INJECTION_REGEX)
+    val nickname: String = nickname isNotInclude Pattern.compile(SQL_INJECTION_REGEX)
+
     private val attendance: Attendance = Attendance(histories = this.userAttendanceHistory)
-    private val isBasicNamePattern = Pattern.compile(BASIC_NAME_REGEX)
 
     companion object {
         fun isNewUser(user: User?): Boolean {
             return user == null
         }
-        private const val BASIC_NAME_REGEX = "^[a-zA-Z0-9\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55가-힣]+$"
-        private const val ENGLISH_BAD_WORD_REGEX = "(fuck|shit|bitch|asshole|bastard|damn|crap|dick|piss|cunt|whore|slut)"
         private const val SQL_INJECTION_REGEX = "('.+--)|(--)|(%7C)|(;)|(\\b(SELECT|INSERT|UPDATE|DELETE|DROP|TRUNCATE|CREATE|ALTER|GRANT|REVOKE|UNION|ALL)\\b)"
     }
 
@@ -61,20 +62,27 @@ class User (
         )
     }
 
+    fun joinAttendance(event: ServerMemberJoinEvent): AttendanceResult =
+        this.attendance.checkAttendance(serverMemberJoinEvent = event)
+
+    fun leftAttendance(event: ServerMemberLeftEvent): AttendanceResult =
+        this.attendance.checkAttendance(serverMemberLeftEvent = event)
+
     private fun validateCheck(field: String, errorMessage: String) {
         field.validate(
-            { Pattern.matches(BASIC_NAME_REGEX, it) &&
-                    !Pattern.matches(ENGLISH_BAD_WORD_REGEX, it) &&
-                    !Pattern.matches(SQL_INJECTION_REGEX, it) },
+            { !Pattern.matches(SQL_INJECTION_REGEX, it) },
             errorMessage = errorMessage
         )
     }
     
     private fun String.validate(validator: (String) -> Boolean, errorMessage: String){
-        if (!validator(this)) throw IllegalArgumentException(errorMessage)
+        if (!validator(this)) throw IllegalArgumentException("$userName $errorMessage")
     }
 
-    //TODO("attendance 진입점 추가")
+    private infix fun String.isNotInclude(invalidPattern: Pattern): String{
+        if(invalidPattern.matcher(this).matches()) throw IllegalArgumentException("Invalid name detected")
+        else return this
+    }
 
 
 }
