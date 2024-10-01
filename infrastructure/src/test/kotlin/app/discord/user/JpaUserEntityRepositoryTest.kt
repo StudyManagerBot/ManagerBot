@@ -23,11 +23,21 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
     repository.save(testUser)
 
     given("유저를 등록할 때"){
-        val registerUser = JpaUserEntityBuilder.validUser()
+        val registerGuildId = "newguildId"
+        val registerUserId = "newuserId"
+        val registerUser = JpaUserEntityBuilder.validUser(
+            guildId = registerGuildId,
+            userId = registerUserId,
+        )
         `when`("정상적인 userIdentifier를 가지고 있다면"){
             then("유저 정보를 저장한다."){
                 repository.save(registerUser)
-                val registeredUser = repository.findByUserIdentifier(userIdentifier = DEFAULT_USER_ENTITY_IDENTIFIER)
+                val registeredUser = repository.findByUserIdentifier(userIdentifier =
+                    UserEntityIdentifier(
+                        guildId = registerGuildId,
+                        userId = registerUserId
+                    )
+                )
 
                 registeredUser shouldNotBe null
                 registeredUser?.id shouldBe  registerUser.id
