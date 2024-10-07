@@ -7,9 +7,9 @@ import java.util.regex.Pattern
 
 class User (
     val userIdentifier: UserIdentifier,
-    userName: String = "",
+    userName: String,
     globalName: String,
-    nickname: String,
+    val nickname: String,
     val registerTime: OffsetDateTime,
     val leaveTime: OffsetDateTime,
     val isBan: Boolean,
@@ -19,7 +19,6 @@ class User (
 ){
     val userName: String = userName isNotInclude Pattern.compile(SQL_INJECTION_REGEX)
     val globalName: String = globalName isNotInclude Pattern.compile(SQL_INJECTION_REGEX)
-    val nickname: String = nickname isNotInclude Pattern.compile(SQL_INJECTION_REGEX)
 
     private val attendance: Attendance = Attendance(histories = this.userAttendanceHistory)
 
@@ -85,10 +84,10 @@ class User (
         if (!validator(this)) throw IllegalArgumentException("$userName $errorMessage")
     }
 
-    private infix fun String.isNotInclude(invalidPattern: Pattern): String{
+    private infix fun String.isNotInclude(invalidPattern: Pattern): String =
         if(invalidPattern.matcher(this).matches()) throw IllegalArgumentException("Invalid name detected")
-        else return this
-    }
+        else this
+
 
 
 }

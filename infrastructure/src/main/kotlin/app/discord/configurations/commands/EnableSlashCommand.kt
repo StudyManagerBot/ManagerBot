@@ -1,11 +1,13 @@
 package app.discord.configurations.commands
 
-import org.springframework.stereotype.Component
-
+@Deprecated(message = "for removal")
 @Target(
     AnnotationTarget.CLASS
 )
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
-@Component
-annotation class EnableSlashCommand
+annotation class EnableSlashCommand(
+    //TODO Non-Global command support
+    val isGlobal: Boolean = true,
+    val referenceGuildId: String = ""
+)
