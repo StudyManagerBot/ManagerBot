@@ -77,6 +77,8 @@ jobs:
           platforms: linux/arm64
           context: ./application
           push: true
+          build-args: |
+            PROFILES=dev
           tags: |
             harbor.registry.notypie.dev/bot/discord-study-manager:${{ env.DOCKER_TAG }}
   
