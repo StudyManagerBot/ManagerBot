@@ -1,5 +1,5 @@
 FROM eclipse-temurin:21.0.4_7-jdk-alpine
-ARG JAR_FILE_NAME=application-0.0.1-SNAPSHOT-plain
+ARG JAR_FILE_NAME=application-0.0.1-SNAPSHOT
 ARG SERVER_PORT=80
 
 ARG PROFILES="prod"

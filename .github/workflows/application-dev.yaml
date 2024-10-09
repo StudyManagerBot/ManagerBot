@@ -1,4 +1,4 @@
-name: Deploy-prod-server
+name: Deploy-dev-server
 on:
   push:
     branches:
@@ -56,7 +56,7 @@ jobs:
         run: ./gradlew clean :application:test domain:test infrastructure:test
 
       - name: Compile
-        run: ./gradlew clean :application:build -x test
+        run: ./gradlew build
 
       - name: Emulator install
         uses: docker/setup-qemu-action@v3
