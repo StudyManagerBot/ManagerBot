@@ -13,6 +13,8 @@ spec:
         app: study-manager
         namespace: studymanager
     spec:
+      imagePullSecrets:
+        - name: dockercred
       containers:
         - name: authentication-service
           image: YOUR_IMAGE_REPOSITORY
