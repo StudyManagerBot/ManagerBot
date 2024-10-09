@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: study-manager
-  namespace: YOUR_NAMESPACE
+  namespace: studymanager
 spec:
   selector:
     matchLabels:
@@ -11,7 +11,7 @@ spec:
     metadata:
       labels:
         app: study-manager
-        namespace: YOUR_NAMESPACE
+        namespace: studymanager
     spec:
       containers:
         - name: authentication-service
