@@ -105,9 +105,9 @@ jobs:
 
       - name: Replace image name
         run: |
-          sed -i "s|YOUR_IMAGE_REPOSITORY|harbor.registry.notypie.dev/bot/discord-study-manager:${{ env.DOCKER_TAG }}|g" application/src/resources/kubernetes/StudyManagerDeployment.yaml
+          sed -i "s|YOUR_IMAGE_REPOSITORY|harbor.registry.notypie.dev/bot/discord-study-manager:${{ env.DOCKER_TAG }}|g" application/src/main/resources/kubernetes/StudyManagerDeployment.yaml
 
       - name: Deploy
-        run: kubectl apply -f application/src/resources/kubernetes/StudyManagerDeployment.yaml
+        run: kubectl apply -f application/src/main/resources/kubernetes/StudyManagerDeployment.yaml
       
 
