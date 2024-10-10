@@ -17,7 +17,7 @@ spring:
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://${SQL_DATABASE_URL}/${SQL_DATABASE_NAME}?characterEncoding=UTF-8&serverTimezone=KST
+    url: ${SQL_DATABASE_URL}
     username: ${SQL_DATABASE_USERNAME}
     password: ${SQL_DATABASE_PASSWORD}
 
