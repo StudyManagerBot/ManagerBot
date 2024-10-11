@@ -1,25 +1,15 @@
 name: Deploy-dev-server
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
-      - "feat/actions"
+      - "develop"
     paths:
       - "application/**"
       - "domain/**"
       - "infrastructure/**"
       - "*.gradle.kts"
-      - ".github/workflows/**"
-
-#  pull_request:
-#    types:
-#      - closed
-#    branches:
-#      - "develop"
-#    paths:
-#      - "application/**"
-#      - "domain/**"
-#      - "infrastructure/**"
-#      - "*.gradle.kts"
 
 permissions:
   contents: read
@@ -29,7 +19,7 @@ env:
 
 jobs:
   build:
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -86,7 +76,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    name: Install Kubectl for OKE
+    name: Deploy to OKE cluster
     env:
       OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
       OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
