@@ -1,6 +1,8 @@
 package app.discord.service.user
 
 import app.discord.user.dto.*
+import app.discord.user.dto.attendance.ServerMemberJoinEvent
+import app.discord.user.dto.attendance.ServerMemberLeftEvent
 import app.discord.user.entity.User
 import app.discord.user.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
 ) : UserService{
+
 
     override fun registerUser(userRegisterEvent: UserRegisterEvent): UserResult {
         val user: User? = userRepository.findUser(userIdentifier = userRegisterEvent.userIdentifier)
@@ -25,7 +28,9 @@ class UserServiceImpl(
                 userAttendanceHistory = emptyMap()
             )
 
+
             userRepository.insertUser(registerUser)
+
             return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
         }
         else {
@@ -69,11 +74,32 @@ class UserServiceImpl(
         return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
     }
 
-    override fun registerGuildMembers(registerGuildMembers: List<UserRegisterEvent>) {
-        TODO("길드의 모든 멤버를 등록하여야함.")
-    }
-
     override fun deleteAllGuildMembers(botKickedEvent: BotKickedEvent) {
         userRepository.deleteAllMembers(guildId = botKickedEvent.guildId)
+    }
+
+    override fun channelJoin(serverMemberJoinEvent: ServerMemberJoinEvent) {
+        val user:User? = userRepository.findUser(userIdentifier = serverMemberJoinEvent.userIdentifier)
+
+        if(user == null){
+            val registerUser = User(
+                userIdentifier = serverMemberJoinEvent.userRegisterEvent.userIdentifier,
+                userName = serverMemberJoinEvent.userRegisterEvent.userName,
+                globalName = serverMemberJoinEvent.userRegisterEvent.globalName,
+                nickname = serverMemberJoinEvent.userRegisterEvent.nickname,
+                registerTime = serverMemberJoinEvent.userRegisterEvent.registerTime,
+                leaveTime = serverMemberJoinEvent.userRegisterEvent.leaveTime,
+                isBan = false,
+                userAttendanceHistory = emptyMap()
+            )
+            userRepository.insertUser(registerUser)
+            registerUser.joinAttendance(event = serverMemberJoinEvent)
+        }else user.joinAttendance(event = serverMemberJoinEvent)
+
+    }
+
+    override fun channelExit(serverMemberLeftEvent: ServerMemberLeftEvent) {
+        val user: User = userRepository.findUserWithNullException(userIdentifier = serverMemberLeftEvent.userIdentifier)
+        user.leftAttendance(serverMemberLeftEvent)
     }
 }

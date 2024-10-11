@@ -1,10 +1,10 @@
-name: Deploy-prod-server
+name: Deploy-dev-server
 on:
   pull_request:
     types:
       - closed
     branches:
-      - "main"
+      - "develop"
     paths:
       - "application/**"
       - "domain/**"
@@ -67,20 +67,23 @@ jobs:
           platforms: linux/arm64
           context: ./application
           push: true
+          build-args: |
+            PROFILES=dev
           tags: |
             harbor.registry.notypie.dev/bot/discord-study-manager:${{ env.DOCKER_TAG }}
+  
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     name: Deploy to OKE cluster
     env:
-      OCI_CLI_USER: ${{ secrets.PROD_OCI_CLI_USER }}
-      OCI_CLI_TENANCY: ${{ secrets.PROD_OCI_CLI_TENANCY }}
-      OCI_CLI_FINGERPRINT: ${{ secrets.PROD_OCI_CLI_FINGERPRINT }}
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
 
-      OCI_CLI_KEY_CONTENT: ${{ secrets.PROD_OCI_CLI_KEY_CONTENT }}
-      OCI_CLI_REGION: ${{ secrets.PROD_OCI_CLI_REGION }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
 
     steps:
       - uses: actions/checkout@v4
@@ -88,7 +91,7 @@ jobs:
         uses: oracle-actions/configure-kubectl-oke@v1.5.0
         id: test-configure-kubectl-oke-action
         with:
-          cluster: ${{ secrets.PROD_OKE_CLUSTER_OCID }}
+          cluster: ${{ secrets.OKE_CLUSTER_OCID }}
 
       - name: Replace image name
         run: |
@@ -96,4 +99,5 @@ jobs:
 
       - name: Deploy
         run: kubectl apply -f application/src/main/resources/kubernetes/StudyManagerDeployment.yaml
+      
 
