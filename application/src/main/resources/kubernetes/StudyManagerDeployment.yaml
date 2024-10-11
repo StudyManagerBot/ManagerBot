@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: study-manager
+  namespace: studymanager
+spec:
+  selector:
+    matchLabels:
+      app: study-manager
+  template:
+    metadata:
+      labels:
+        app: study-manager
+        namespace: studymanager
+    spec:
+      imagePullSecrets:
+        - name: dockercred
+      containers:
+        - name: authentication-service
+          image: YOUR_IMAGE_REPOSITORY
+          ports:
+            - containerPort: 80
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef: # Secretes
+                name: study-manager-secret
+#            - configMapRef:
+#                name: study-manager-configmap

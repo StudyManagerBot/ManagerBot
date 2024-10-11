@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: study-manager-svc
+  namespace: studymanager
+spec:
+  ports:
+    - name: study-manager-svc
+      port: 80
+      targetPort: 80
+  selector:
+    app: study-manager
+  type: ClusterIP
