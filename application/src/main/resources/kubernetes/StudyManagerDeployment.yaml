@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: study-manager
-  namespace: YOUR_NAMESPACE
+  namespace: studymanager
 spec:
   selector:
     matchLabels:
@@ -11,8 +11,10 @@ spec:
     metadata:
       labels:
         app: study-manager
-        namespace: YOUR_NAMESPACE
+        namespace: studymanager
     spec:
+      imagePullSecrets:
+        - name: dockercred
       containers:
         - name: authentication-service
           image: YOUR_IMAGE_REPOSITORY
@@ -22,5 +24,5 @@ spec:
           envFrom:
             - secretRef: # Secretes
                 name: study-manager-secret
-            - configMapRef:
-                name: study-manager-configmap
+#            - configMapRef:
+#                name: study-manager-configmap
