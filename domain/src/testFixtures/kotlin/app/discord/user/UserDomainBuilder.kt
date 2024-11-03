@@ -7,14 +7,9 @@ import java.time.ZoneOffset
 
 class UserDomainBuilder private constructor() {
     companion object{
-        fun validUser(
-            userIdentifier: UserIdentifier =
-                UserIdentifier(
-                    guildId = "testGuildId",
-                    userId = "testUserId")
-        )= User(
-                    userIdentifier = userIdentifier,
-                    userName = "testUserName",
+        fun validUser()= User(
+                    userIdentifier = DEFAULT_USER_IDENTIFIER,
+                    userName = DEFAULT_USER_NAME,
                     globalName = "",
                     nickname = "",
                     registerTime = OffsetDateTime.now(),

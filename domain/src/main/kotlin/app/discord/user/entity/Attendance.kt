@@ -17,11 +17,11 @@ internal class Attendance(
                 attendanceHistories = UserAttendanceHistory(
                     userIdentifier = serverMemberJoinEvent.userIdentifier,
                     attendanceDates = listOf(
-                        UserAttendance(
-                            attendanceTime = serverMemberJoinEvent.joinTime,
-                            date = serverMemberJoinEvent.joinTime.toLocalDate(),
-                            exitTime = null
-                        )
+//                        UserAttendance(
+//                            attendanceTime = serverMemberJoinEvent.joinTime,
+//                            date = serverMemberJoinEvent.joinTime.toLocalDate(),
+//                            exitTime = null
+//                        )
                     )
                 )
             )

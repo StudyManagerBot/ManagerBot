@@ -6,6 +6,7 @@ import app.discord.user.dto.GuildMemberLeaveEvent
 import app.discord.user.dto.UserRegisterEvent
 import app.discord.user.dto.UserUpdateEvent
 import app.discord.user.dto.attendance.ServerMemberJoinEvent
+import app.discord.user.dto.attendance.ServerMemberLeftEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Controller
 
@@ -13,12 +14,6 @@ import org.springframework.stereotype.Controller
 class DiscordEventController(
     private val userService: UserService,
 ) {
-
-    @EventListener(ServerMemberJoinEvent::class)
-    fun handleServerJoinEvent(event: ServerMemberJoinEvent) {
-
-    }
-
     @EventListener(UserRegisterEvent::class)
     fun userRegisterEvent(event: UserRegisterEvent) {
         userService.registerUser(userRegisterEvent = event)
@@ -39,5 +34,13 @@ class DiscordEventController(
         userService.deleteAllGuildMembers(botKickedEvent = event)
     }
 
+    @EventListener(ServerMemberJoinEvent::class)
+    fun handleServerJoinEvent(event: ServerMemberJoinEvent) {
+        userService.channelJoin(serverMemberJoinEvent = event)
+    }
 
+    @EventListener(ServerMemberLeftEvent::class)
+    fun handleServerLeftEvent(event: ServerMemberLeftEvent) {
+        userService.channelExit(serverMemberLeftEvent = event)
+    }
 }
