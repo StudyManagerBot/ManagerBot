@@ -13,6 +13,7 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -66,7 +67,7 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
                 foundUser?.nickname shouldBe testUser.nickname
                 foundUser?.isBan shouldBe testUser.isBan
                 foundUser?.registerTime shouldBe testUser.registerTime
-                foundUser?.leaveTime shouldBe OffsetDateTime.MIN
+                foundUser?.leaveTime shouldBe OffsetDateTime.of(1990,1,1,0,0,0,0, ZoneOffset.of("+09:00"))
             }
         }
         `when`("유저 정보가 없다면"){

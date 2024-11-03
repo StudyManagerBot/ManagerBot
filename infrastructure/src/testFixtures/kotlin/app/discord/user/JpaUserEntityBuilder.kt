@@ -3,13 +3,15 @@ package app.discord.user
 import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import app.discord.repository.jpa.user.schema.UserEntity
 import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 const val DEFAULT_GUILD_ID = "testGuildId"
 const val DEFAULT_USER_ID = "testUserId"
 const val DEFAULT_USER_NAME = "testUsername"
 const val DEFAULT_GLOBAL_NAME = "testGlobalName"
 val DEFAULT_USER_ENTITY_IDENTIFIER = UserEntityIdentifier(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
-
+val DEFAULT_REGISTER_TIME: OffsetDateTime = OffsetDateTime.now()
+val DEFAULT_MIN_TIME: OffsetDateTime = OffsetDateTime.of(1990,1,1,0,0,0,0, ZoneOffset.of("+09:00"))
 
 class JpaUserEntityBuilder private constructor() {
     companion object {
@@ -22,10 +24,9 @@ class JpaUserEntityBuilder private constructor() {
             globalName = DEFAULT_GLOBAL_NAME,
             nickname = "",
             isBan = false,
-            registerTime = OffsetDateTime.now(),
-            leaveTime = OffsetDateTime.MIN,
+            registerTime = DEFAULT_REGISTER_TIME,
+            leaveTime = DEFAULT_MIN_TIME
         )
-
 
         fun leavedUser(
             userEntity: UserEntity,

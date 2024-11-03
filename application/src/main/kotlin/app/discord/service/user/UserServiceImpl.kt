@@ -6,13 +6,14 @@ import app.discord.user.dto.attendance.ServerMemberLeftEvent
 import app.discord.user.entity.User
 import app.discord.user.repository.UserRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
 ) : UserService{
 
-
+    @Transactional
     override fun registerUser(userRegisterEvent: UserRegisterEvent): UserResult {
         val user: User? = userRepository.findUser(userIdentifier = userRegisterEvent.userIdentifier)
 
@@ -46,6 +47,7 @@ class UserServiceImpl(
         }
     }
 
+    @Transactional
     override fun updateUserInfo(userUpdateEvent: UserUpdateEvent): UserResult {
         val user: User = userRepository.findUserWithNullException(userIdentifier = userUpdateEvent.userIdentifier)
         val updateUser = user.updateUserInfo(
@@ -58,6 +60,7 @@ class UserServiceImpl(
         return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
     }
 
+    @Transactional
     override fun updateUserNickname(userNickNameChangedEvent: NickNameChangedEvent): UserResult {
         val user: User = userRepository.findUserWithNullException(userIdentifier = userNickNameChangedEvent.userIdentifier)
         val nickNameChangedUser = user.updateUserInfo(nickname = userNickNameChangedEvent.nickname)
@@ -66,6 +69,7 @@ class UserServiceImpl(
         return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
     }
 
+    @Transactional
     override fun leaveUser(guildMemberLeaveEvent: GuildMemberLeaveEvent): UserResult {
         val user: User = userRepository.findUserWithNullException(userIdentifier = guildMemberLeaveEvent.userIdentifier)
         val leavedUser = user.leaveUser(leaveTime = guildMemberLeaveEvent.leaveTime)
@@ -74,10 +78,12 @@ class UserServiceImpl(
         return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
     }
 
+    @Transactional
     override fun deleteAllGuildMembers(botKickedEvent: BotKickedEvent) {
         userRepository.deleteAllMembers(guildId = botKickedEvent.guildId)
     }
 
+    @Transactional
     override fun channelJoin(serverMemberJoinEvent: ServerMemberJoinEvent) {
         val user:User? = userRepository.findUser(userIdentifier = serverMemberJoinEvent.userIdentifier)
 
@@ -94,12 +100,19 @@ class UserServiceImpl(
             )
             userRepository.insertUser(registerUser)
             registerUser.joinAttendance(event = serverMemberJoinEvent)
-        }else user.joinAttendance(event = serverMemberJoinEvent)
+            this.userRepository.updateUser(user = registerUser)
+
+        }else {
+            user.joinAttendance(event = serverMemberJoinEvent)
+            this.userRepository.updateUser(user = user)
+        }
 
     }
 
+    @Transactional
     override fun channelExit(serverMemberLeftEvent: ServerMemberLeftEvent) {
         val user: User = userRepository.findUserWithNullException(userIdentifier = serverMemberLeftEvent.userIdentifier)
         user.leftAttendance(serverMemberLeftEvent)
+        this.userRepository.updateUser(user = user)
     }
 }

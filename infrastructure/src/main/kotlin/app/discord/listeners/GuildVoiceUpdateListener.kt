@@ -7,7 +7,10 @@ import app.discord.user.dto.attendance.ServerMemberLeftEvent
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent
 import org.springframework.context.ApplicationEventPublisher
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 @DiscordEventHandler
 class GuildVoiceUpdateListener(
@@ -15,7 +18,6 @@ class GuildVoiceUpdateListener(
 ) : DiscordListener(applicationEventPublisher = applicationEventPublisher){
 
     override fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
-
         val joinChannel: AudioChannelUnion? = event.channelJoined
         val leftChannel: AudioChannelUnion? = event.channelLeft
         val updateChannel: AudioChannelUnion? = joinChannel ?: leftChannel
@@ -30,7 +32,7 @@ class GuildVoiceUpdateListener(
 
     private fun toChannelJoinEvent(event: GuildVoiceUpdateEvent, audioChannel: AudioChannelUnion): ServerMemberJoinEvent {
         val userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.member.id)
-        val userName = event.guild.selfMember.user.name
+        val userName = event.member.user.name
         return ServerMemberJoinEvent(
             userIdentifier = userIdentifier,
             userName = userName,
@@ -39,10 +41,10 @@ class GuildVoiceUpdateListener(
             userRegisterEvent = UserRegisterEvent(
                 userIdentifier = userIdentifier,
                 userName = userName,
-                globalName = event.guild.selfMember.user.globalName?:"",
-                nickname = event.guild.selfMember.nickname?:"",
+                globalName = event.member.user.globalName?:"unknown",
+                nickname = event.member.nickname?:"unknown",
                 registerTime = OffsetDateTime.now(),
-                leaveTime = OffsetDateTime.MIN
+                leaveTime = OffsetDateTime.of(1990,1,1,0,0,0,0, ZoneOffset.of("+09:00"))
             )
         )
     }

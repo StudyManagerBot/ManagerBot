@@ -9,5 +9,5 @@ interface UserRepository {
     fun findUserWithNullException(userIdentifier: UserIdentifier): User
     fun insertUser(user: User): User
     fun updateUser(user: User): User
-    fun deleteAllMembers(guildId: String)
+    fun deleteAllMembers(guildId: String) //FIXME(return값 돌려줄것.)
 }

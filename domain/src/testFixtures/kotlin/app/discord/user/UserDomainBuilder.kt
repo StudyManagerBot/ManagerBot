@@ -2,9 +2,6 @@ package app.discord.user
 
 import app.discord.user.dto.UserIdentifier
 import app.discord.user.entity.User
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
-
 class UserDomainBuilder private constructor() {
     companion object{
         fun validUser()= User(
@@ -12,12 +9,11 @@ class UserDomainBuilder private constructor() {
                     userName = DEFAULT_USER_NAME,
                     globalName = "",
                     nickname = "",
-                    registerTime = OffsetDateTime.now(),
-                    leaveTime = OffsetDateTime.MIN,
+                    registerTime = DEFAULT_REGISTER_TIME,
+                    leaveTime = DEFAULT_MIN_TIME,
                     isBan = false,
                     userAttendanceHistory = emptyMap()
                 )
-
 
         fun inValidUserName(
             userIdentifier: UserIdentifier =
@@ -29,8 +25,8 @@ class UserDomainBuilder private constructor() {
             userName = "*&%*\$(@!\$*(*!@^%)",
             globalName = "",
             nickname = "",
-            registerTime = OffsetDateTime.now(),
-            leaveTime = OffsetDateTime.MIN,
+            registerTime = DEFAULT_REGISTER_TIME,
+            leaveTime = DEFAULT_MIN_TIME,
             isBan = false,
             userAttendanceHistory = emptyMap()
         )

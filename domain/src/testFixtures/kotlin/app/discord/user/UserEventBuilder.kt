@@ -5,6 +5,7 @@ import app.discord.user.dto.UserRegisterEvent
 import app.discord.user.dto.attendance.ServerMemberJoinEvent
 import app.discord.user.dto.attendance.ServerMemberLeftEvent
 import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 
 const val DEFAULT_GUILD_ID = "testGuildId"
@@ -18,11 +19,15 @@ const val DEFAULT_CHANNEL_NAME = "testAudioChannelName"
 const val INVALID_SPECIAL_STRING = "'; DROP TABLE users; --"
 const val INVALID_EMPTY_STRING= "   "
 
+val DEFAULT_REGISTER_TIME: OffsetDateTime = OffsetDateTime.now(ZoneOffset.of("+09:00"))
+val DEFAULT_MIN_TIME: OffsetDateTime = OffsetDateTime.of(1990,1,1,0,0,0,0, ZoneOffset.of("+09:00"))
+
+
 fun userRegisterEvent(
     globalName: String = "",
     nickName: String = "",
-    registerTime: OffsetDateTime = OffsetDateTime.now(),
-    leaveTime: OffsetDateTime = OffsetDateTime.MIN
+    registerTime: OffsetDateTime = DEFAULT_REGISTER_TIME,
+    leaveTime: OffsetDateTime = DEFAULT_MIN_TIME
 ) =
     UserRegisterEvent(
         userIdentifier = DEFAULT_USER_IDENTIFIER,
@@ -44,8 +49,8 @@ fun serverMemberJoinEvent() =
             userName = DEFAULT_USER_NAME,
             globalName = "",
             nickname = "",
-            registerTime = OffsetDateTime.now(),
-            leaveTime = OffsetDateTime.MIN
+            registerTime = DEFAULT_REGISTER_TIME,
+            leaveTime = DEFAULT_MIN_TIME
     )
 )
 

@@ -5,7 +5,9 @@ import app.discord.user.dto.UserRegisterEvent
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import org.springframework.context.ApplicationEventPublisher
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 @DiscordEventHandler
 class CommandListener (
@@ -33,7 +35,7 @@ class CommandListener (
             globalName = member.user.globalName?:"",
             nickname = member.nickname?:"",
             registerTime = OffsetDateTime.now(),
-            leaveTime = OffsetDateTime.MIN,
+            leaveTime = OffsetDateTime.of(LocalDateTime.of(1990, 1, 1, 0, 0, 0), ZoneOffset.of("+09:00"))
         )
 
 

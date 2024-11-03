@@ -3,6 +3,8 @@ package app.discord.repository.jpa.user.schema
 import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.TimeZoneStorage
+import org.hibernate.annotations.TimeZoneStorageType
 import java.time.OffsetDateTime
 
 @Entity(name = "Users")
@@ -30,6 +32,7 @@ class UserEntity(
     @field: Column(name = "CREATED_TIME")
     val registerTime: OffsetDateTime,
 
+    @field: TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     @field: Column(name = "LEAVE_TIME")
     val leaveTime: OffsetDateTime
 

@@ -73,7 +73,7 @@ class CheckUserTest : BehaviorSpec({
 
         `when`("입장 로그가 없을때, 길드채널에서 나가면"){
             val leftEvent = serverMemberLeftEvent()
-            then("오류를 발생시킨다."){ // FIXME 오류가 나와야하는데 왜?
+            then("오류를 발생시킨다."){
                 shouldThrowExactly<IllegalArgumentException> {
                     val result = user.leftAttendance(event = leftEvent)
                     result.status.isOk() shouldBe false
