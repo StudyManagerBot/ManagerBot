@@ -10,8 +10,8 @@ import kotlin.math.absoluteValue
 class JpaAttendanceHistoryEntity(
 
     @field:Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    @field:GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0L,
 
     @field:Embedded
     val userIdentifier: UserEntityIdentifier,

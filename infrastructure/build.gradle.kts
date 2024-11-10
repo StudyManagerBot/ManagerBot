@@ -11,6 +11,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("net.dv8tion:JDA:${rootProject.extra.get("jdaVersion")}")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation(testFixtures(project(":domain")))
     //Springboot starter jpa
     api("org.springframework.boot:spring-boot-starter-data-jpa")
     //AOP

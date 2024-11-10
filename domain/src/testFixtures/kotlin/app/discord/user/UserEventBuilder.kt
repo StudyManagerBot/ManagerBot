@@ -13,6 +13,7 @@ const val DEFAULT_USER_ID = "testUserId"
 val DEFAULT_USER_IDENTIFIER = UserIdentifier(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
 
 const val DEFAULT_USER_NAME = "testUserName"
+const val DEFAULT_NICK_NAME = "testNickName"
 const val DEFAULT_CHANNEL_ID = "testAudioChannelId"
 const val DEFAULT_CHANNEL_NAME = "testAudioChannelName"
 

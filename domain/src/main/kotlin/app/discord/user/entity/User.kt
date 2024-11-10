@@ -22,9 +22,7 @@ class User (
     private val attendance: Attendance = Attendance(histories = this.userAttendanceHistory)
 
     companion object {
-        fun isNewUser(user: User?): Boolean {
-            return user == null
-        }
+        fun isNewUser(user: User?): Boolean = user == null
         private const val SQL_INJECTION_REGEX = "('.+--)|(--)|(%7C)|(;)|(\\b(SELECT|INSERT|UPDATE|DELETE|DROP|TRUNCATE|CREATE|ALTER|GRANT|REVOKE|UNION|ALL)\\b)"
     }
 
@@ -49,8 +47,8 @@ class User (
         )
     }
 
-    fun leaveUser(leaveTime: OffsetDateTime): User{
-        return User(
+    fun leaveUser(leaveTime: OffsetDateTime): User =
+        User(
             userIdentifier = this.userIdentifier,
             userName = this.userName,
             globalName = this.globalName,
@@ -60,7 +58,12 @@ class User (
             isBan = this.isBan,
             userAttendanceHistory = userAttendanceHistory,
         )
-    }
+
+    fun getTotalAttendanceHistories(userIdentifier: UserIdentifier = this.userIdentifier) =
+        this.attendance.getUserTotalAttendanceHistories(userIdentifier = userIdentifier)
+
+    fun getLatestAttendanceHistory(userIdentifier: UserIdentifier = this.userIdentifier) =
+        this.attendance.getLatestAttendanceHistory(userIdentifier = userIdentifier)
 
     fun joinAttendance(event: ServerMemberJoinEvent): AttendanceResult =
         this.attendance.checkAttendance(serverMemberJoinEvent = event)
@@ -68,12 +71,11 @@ class User (
     fun leftAttendance(event: ServerMemberLeftEvent): AttendanceResult =
         this.attendance.checkAttendance(serverMemberLeftEvent = event)
 
-    private fun validateCheck(field: String, errorMessage: String) {
+    private fun validateCheck(field: String, errorMessage: String) =
         field.validate(
             { !Pattern.matches(SQL_INJECTION_REGEX, it) },
             errorMessage = errorMessage
         )
-    }
     
     private fun String.validate(validator: (String) -> Boolean, errorMessage: String){
         if (!validator(this)) throw IllegalArgumentException("$userName $errorMessage")

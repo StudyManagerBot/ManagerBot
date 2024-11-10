@@ -14,7 +14,7 @@ class CheckUserTest : BehaviorSpec({
             val serverMemberJoinEvent = serverMemberJoinEvent()
             then("유저를 가입시키고, 출석 처리를 한다."){
                 if(user == null){
-                    val registerUser = UserDomainBuilder.validUser()
+                    val registerUser = validUser()
                     val attendanceResult = registerUser.joinAttendance(serverMemberJoinEvent)
                     attendanceResult.status.isOk() shouldBe true
                 }
@@ -23,7 +23,7 @@ class CheckUserTest : BehaviorSpec({
     }
 
     given("올바른 유저가") {
-        val user = UserDomainBuilder.validUser()
+        val user = validUser()
         `when`("올바른 유저정보를 업데이트하면"){
             val updatedUserName = "testUName"
             val updatedGlobalName = "testGName"

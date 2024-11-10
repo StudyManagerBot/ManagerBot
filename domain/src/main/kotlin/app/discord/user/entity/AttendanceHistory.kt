@@ -37,6 +37,37 @@ internal class AttendanceHistory(
         )
     }
 
+    internal fun getAllAttendanceHistories(): List<UserAttendance> =
+        this.histories.flatMap { (date, periods) ->
+            periods.map { period ->
+                UserAttendance(
+                    date = date,
+                    attendanceTime = period.startTime,
+                    exitTime = period.endTime
+                )
+            }
+    }
+
+    internal fun getAttendanceHistories(date: LocalDate): List<UserAttendance> =
+        histories[date]?.map { period ->
+            UserAttendance(
+                date = date,
+                attendanceTime = period.startTime,
+                exitTime = period.endTime
+            )
+        } ?: emptyList()
+
+    internal fun getLatestHistory(): UserAttendance? {
+        val latestKey = histories.keys.maxOrNull() ?: return null
+        val latestHistory = histories[latestKey]?.lastOrNull() ?: return null
+
+        return UserAttendance(
+            date = latestHistory.startTime.toLocalDate(),
+            attendanceTime = latestHistory.startTime,
+            exitTime = latestHistory.endTime
+        )
+    }
+
 
     private fun checkAttendanceStartTime(startTime: OffsetDateTime, timePeriods: MutableList<TimePeriod>): AttendanceResult{
         val lastPeriod = timePeriods.lastOrNull()

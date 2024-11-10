@@ -8,11 +8,11 @@ import io.kotest.matchers.shouldNotBe
 import java.time.Duration
 
 class CheckAttendanceTest : BehaviorSpec({
-    val userIdentifier = AttendanceDomainBuilder.testUserIdentifier()
-    val serverMemberJoinEvent = ServerMemberEventBuilder.serverMemberJoinEvent(userIdentifier = userIdentifier)
+    val userIdentifier = testUserIdentifier()
+    val serverMemberJoinEvent = serverMemberJoinEvent(userIdentifier = userIdentifier)
 
     given("no attendance data"){
-        val histories = AttendanceDomainBuilder.whenNoAttendanceData(userIdentifier = userIdentifier)
+        val histories = whenNoAttendanceData(userIdentifier = userIdentifier)
         val attendance = Attendance(histories = histories)
 
         `when`("do attendance"){
@@ -33,7 +33,7 @@ class CheckAttendanceTest : BehaviorSpec({
     }
 
     given("when attendance checked"){
-        val histories = AttendanceDomainBuilder.whenAttendanceCheck(userIdentifier = userIdentifier)
+        val histories = singleCheckAttendanceHistory(userIdentifier = userIdentifier)
         val attendance = Attendance(histories = histories)
 
         `when`("do attendance"){

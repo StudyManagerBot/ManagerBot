@@ -20,13 +20,13 @@ import java.time.ZoneOffset
 class JpaUserEntityRepositoryTest @Autowired constructor(
     private val repository: JpaUserEntityRepository
 ): BehaviorSpec({
-    val testUser = JpaUserEntityBuilder.validUser()
+    val testUser = validUserEntity()
     repository.save(testUser)
 
     given("유저를 등록할 때"){
         val registerGuildId = "newguildId"
         val registerUserId = "newuserId"
-        val registerUser = JpaUserEntityBuilder.validUser(
+        val registerUser = validUserEntity(
             guildId = registerGuildId,
             userId = registerUserId,
         )
@@ -119,7 +119,7 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
     given("유저가 서버에서 탈퇴할 때"){
         `when`("유저가 올바른 유저라면"){
             then("유저를 탈퇴시킨다."){
-                val leavedUser = JpaUserEntityBuilder.leavedUser(
+                val leavedUser = leavedUser(
                     userEntity = testUser
                 )
                 repository.save(leavedUser)
@@ -138,7 +138,7 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
     }
 
     given("1개의 길드의 모든 멤버 정보를 삭제할 때"){
-        val userToDelete = JpaUserEntityBuilder.validUser(guildId = "deletedGuildId")
+        val userToDelete = validUserEntity(guildId = "deletedGuildId")
         repository.save(userToDelete)
         `when`("guildId가 있다면"){
             then("해당 길드 유저 정보를 모두 지운다."){

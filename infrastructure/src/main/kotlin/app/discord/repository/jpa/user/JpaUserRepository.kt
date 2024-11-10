@@ -6,10 +6,12 @@ import app.discord.repository.jpa.attendance.schema.JpaAttendanceHistoryEntity
 import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import app.discord.repository.jpa.user.schema.UserEntity
 import app.discord.user.dto.UserIdentifier
+import app.discord.user.dto.attendance.UserAttendance
 import app.discord.user.entity.User
 import app.discord.user.repository.UserRepository
+import org.springframework.transaction.annotation.Transactional
 
-class JpaUserRepository(
+open class JpaUserRepository(
     private val jpaUserEntityRepository: JpaUserEntityRepository,
     private val jpaAttendanceHistoryRepository: JpaAttendanceHistoryRepository
 ): UserRepository {
@@ -29,28 +31,10 @@ class JpaUserRepository(
     }
 
 
-    override fun findUserWithNullException(userIdentifier: UserIdentifier): User {
+    override fun findUserWithNullException(userIdentifier: UserIdentifier): User =
+        this.findUser(userIdentifier = userIdentifier) ?: throw NullPointerException("user not found")
 
-        val userEntityIdentifier = UserEntityIdentifier(
-            guildId = userIdentifier.guildId,
-            userId = userIdentifier.userId
-        )
-
-        val userEntity:UserEntity? =
-            jpaUserEntityRepository.findByUserIdentifier(userIdentifier = userEntityIdentifier)
-
-
-        val jpaAttendanceHistories =
-            jpaAttendanceHistoryRepository.findAllByUserIdentifier(userEntityIdentifier = userEntityIdentifier)
-
-        if(userEntity != null) {
-            return this.toDomainEntity(userEntity, jpaAttendanceHistories)
-        }
-        else{throw NullPointerException("no have user")}
-
-    }
-
-
+    @Transactional
     override fun insertUser(user: User): User{
         val userEntity = toJpaEntity(user = user)
         jpaUserEntityRepository.save(userEntity)
@@ -59,13 +43,36 @@ class JpaUserRepository(
             guildId = user.userIdentifier.guildId,
             userId = user.userIdentifier.userId
         )
-        val jpaAttendanceHistories =
-            jpaAttendanceHistoryRepository.findAllByUserIdentifier(userEntityIdentifier = userEntityIdentifier)
+        val lastHistory: UserAttendance? = user.getLatestAttendanceHistory()
+        val jpaLastHistory: JpaAttendanceHistoryEntity? =
+            this.jpaAttendanceHistoryRepository.findFirstOrderByAttendanceTimeDesc()
 
+        if( jpaLastHistory == null && lastHistory != null ){
+            this.jpaAttendanceHistoryRepository.save(
+                JpaAttendanceHistoryEntity(
+                    userIdentifier = userEntityIdentifier,
+                    date = lastHistory.date,
+                    attendanceTime = lastHistory.attendanceTime,
+                    exitTime = lastHistory.exitTime
+                ))
+        }
+        else if( jpaLastHistory != null && lastHistory != null ){
+            if(jpaLastHistory.attendanceTime != lastHistory.attendanceTime){
+                this.jpaAttendanceHistoryRepository.save(
+                    JpaAttendanceHistoryEntity(
+                        userIdentifier = userEntityIdentifier,
+                        date = lastHistory.date,
+                        attendanceTime = lastHistory.attendanceTime,
+                        exitTime = lastHistory.exitTime
+                    ))
+            }
+        }
+        val jpaAttendanceHistories =
+            this.jpaAttendanceHistoryRepository.findAllByUserIdentifier(userEntityIdentifier = userEntityIdentifier)
         return toDomainEntity(jpaEntity = userEntity, jpaAttendanceHistories = jpaAttendanceHistories)
     }
 
-
+    @Transactional
     override fun updateUser(user: User): User {
         val nowUser =
             jpaUserEntityRepository.findByUserIdentifier(
@@ -94,7 +101,7 @@ class JpaUserRepository(
     }
 
 
-    private fun toJpaEntity(user: User, id: Long = 0L)=
+    private fun toJpaEntity(user: User, id: Long = 0L) =
         UserEntity(
             id = id,
             userIdentifier = UserEntityIdentifier(
@@ -110,8 +117,8 @@ class JpaUserRepository(
         )
 
 
-    private fun toDomainEntity(jpaEntity: UserEntity, jpaAttendanceHistories: List<JpaAttendanceHistoryEntity>): User {
-        val user = User(
+    private fun toDomainEntity(jpaEntity: UserEntity, jpaAttendanceHistories: List<JpaAttendanceHistoryEntity>): User =
+        User(
             userIdentifier = UserIdentifier(
                 guildId = jpaEntity.userIdentifier.guildId,
                 userId = jpaEntity.userIdentifier.userId,
@@ -125,6 +132,4 @@ class JpaUserRepository(
             userAttendanceHistory =
             if (jpaAttendanceHistories.isNotEmpty()) UserAttendanceHistoryMapper.map(jpaAttendanceHistories = jpaAttendanceHistories) else mapOf()
         )
-        return user
-    }
 }

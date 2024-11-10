@@ -31,4 +31,26 @@ internal class Attendance(
     internal fun checkAttendance( serverMemberLeftEvent: ServerMemberLeftEvent ): AttendanceResult =
         attendanceHistories[serverMemberLeftEvent.userIdentifier]?.checkExitTime(serverMemberLeftEvent.leftTime)
             ?: throw IllegalArgumentException("user attendance history not exists")
+
+    internal fun getUserTotalAttendanceHistories(userIdentifier: UserIdentifier? = null): List<UserAttendanceHistory> {
+        return when (userIdentifier) {
+            null -> this.attendanceHistories.map { (identifier, attendanceHistory) ->
+                UserAttendanceHistory(
+                    userIdentifier = identifier,
+                    attendanceDates = attendanceHistory.getAllAttendanceHistories()
+                )
+            }
+            else -> {
+                this.attendanceHistories[userIdentifier]?.let {
+                    listOf(UserAttendanceHistory(
+                        userIdentifier = userIdentifier,
+                        attendanceDates = it.getAllAttendanceHistories()
+                    ))
+                } ?: emptyList()
+            }
+        }
+    }
+
+    internal fun getLatestAttendanceHistory(userIdentifier: UserIdentifier): UserAttendance? =
+        this.attendanceHistories[userIdentifier]?.getLatestHistory()
 }
