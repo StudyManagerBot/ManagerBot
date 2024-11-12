@@ -7,7 +7,7 @@ import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.longs.shouldBeLessThanOrEqual
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.math.absoluteValue
 
@@ -56,7 +56,7 @@ class JpaAttendanceRepositoryCRUDTest @Autowired constructor(
 
         `when`("update single attendanceHistory"){
             attendanceRepository.save(jpaAttendanceHistory2)
-            val updateHistory = jpaAttendanceHistory2.change(exitTime = OffsetDateTime.now())
+            val updateHistory = jpaAttendanceHistory2.change(exitTime = LocalDateTime.now())
             attendanceRepository.save(updateHistory)
 
             then("successfully update attendance history"){

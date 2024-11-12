@@ -4,7 +4,7 @@ import app.discord.user.dto.GuildMemberLeaveEvent
 import app.discord.user.dto.UserIdentifier
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
 import org.springframework.context.ApplicationEventPublisher
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 
 @DiscordEventHandler
 class GuildMemberLeaveEventListener(
@@ -20,7 +20,7 @@ class GuildMemberLeaveEventListener(
     private fun toGuildMemberLeaveEvent(event: GuildMemberRemoveEvent) =
         GuildMemberLeaveEvent(
             userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.user.id),
-            leaveTime = OffsetDateTime.now()
+            leaveTime = LocalDateTime.now()
         )
 
 }

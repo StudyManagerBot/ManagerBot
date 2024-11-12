@@ -23,8 +23,8 @@ class GuildMemberJoinEventListener(
         userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.member.user.id),
         userName = event.user.name,
         globalName = event.user.globalName ?: "unknown",
-        registerTime = event.member.timeJoined,
+        registerTime = event.member.timeJoined.toLocalDateTime(),
         nickname = event.member.nickname ?: "unknown",
-        leaveTime = OffsetDateTime.of(LocalDateTime.of(1990, 1, 1, 0, 0, 0), ZoneOffset.of("+09:00"))
+        leaveTime = LocalDateTime.MIN
     )
 }

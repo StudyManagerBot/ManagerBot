@@ -2,6 +2,7 @@ package app.discord.user.entity
 
 import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.attendance.*
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.util.regex.Pattern
 
@@ -10,8 +11,8 @@ class User (
     userName: String = "",
     globalName: String,
     nickname: String,
-    val registerTime: OffsetDateTime,
-    val leaveTime: OffsetDateTime,
+    val registerTime: LocalDateTime,
+    val leaveTime: LocalDateTime,
     val isBan: Boolean,
     private val userAttendanceHistory: Map<UserIdentifier, UserAttendanceHistory>
 ){
@@ -29,7 +30,7 @@ class User (
     fun updateUserInfo(userName: String = "",
                        globalName: String = "",
                        nickname: String = "",
-                       leaveTime: OffsetDateTime = this.leaveTime): User
+                       leaveTime: LocalDateTime = this.leaveTime): User
     {
         validateCheck(userName, errorMessage = "Invalid user name")
         validateCheck(globalName, errorMessage = "Invalid global name")
@@ -47,7 +48,7 @@ class User (
         )
     }
 
-    fun leaveUser(leaveTime: OffsetDateTime): User =
+    fun leaveUser(leaveTime: LocalDateTime): User =
         User(
             userIdentifier = this.userIdentifier,
             userName = this.userName,

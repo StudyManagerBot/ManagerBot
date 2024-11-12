@@ -3,13 +3,13 @@ package app.discord.user.attendance
 import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.attendance.UserAttendance
 import app.discord.user.dto.attendance.UserAttendanceHistory
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 
 fun singleCheckAttendanceHistory(userIdentifier: UserIdentifier = UserIdentifier(
     guildId = "testGuildId",
     userId = "testUserId")
 ): Map<UserIdentifier, UserAttendanceHistory>{
-    val now = OffsetDateTime.now()
+    val now = LocalDateTime.now()
     val attendanceDates: List<UserAttendance> = listOf(
         UserAttendance(
             date = now.toLocalDate(),

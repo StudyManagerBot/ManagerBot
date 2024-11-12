@@ -37,14 +37,14 @@ class GuildVoiceUpdateListener(
             userIdentifier = userIdentifier,
             userName = userName,
             channelId = audioChannel.id, channelName = audioChannel.name,
-            joinTime = OffsetDateTime.now(),
+            joinTime = LocalDateTime.now(),
             userRegisterEvent = UserRegisterEvent(
                 userIdentifier = userIdentifier,
                 userName = userName,
                 globalName = event.member.user.globalName?:"unknown",
                 nickname = event.member.nickname?:"unknown",
-                registerTime = OffsetDateTime.now(),
-                leaveTime = OffsetDateTime.of(1990,1,1,0,0,0,0, ZoneOffset.of("+09:00"))
+                registerTime = LocalDateTime.now(),
+                leaveTime = LocalDateTime.MIN
             )
         )
     }
@@ -54,6 +54,6 @@ class GuildVoiceUpdateListener(
             userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.member.user.id),
             userName = event.member.user.name,
             channelId = audioChannel.id, channelName = audioChannel.name,
-            leftTime = OffsetDateTime.now()
+            leftTime = LocalDateTime.now()
         )
 }

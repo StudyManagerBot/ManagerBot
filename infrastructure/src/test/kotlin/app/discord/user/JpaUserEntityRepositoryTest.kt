@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
+import java.time.LocalDateTime
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -67,7 +66,7 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
                 foundUser?.nickname shouldBe testUser.nickname
                 foundUser?.isBan shouldBe testUser.isBan
                 foundUser?.registerTime shouldBe testUser.registerTime
-                foundUser?.leaveTime shouldBe OffsetDateTime.of(1990,1,1,0,0,0,0, ZoneOffset.of("+09:00"))
+                foundUser?.leaveTime shouldBe LocalDateTime.MIN
             }
         }
         `when`("유저 정보가 없다면"){
@@ -86,7 +85,7 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
             then("유저 정보가 업데이트 된다.") {
                 val tryUpdateUser = testUser.change(
                     globalName = "updateUserName",
-                    registerTime = OffsetDateTime.now().plusHours(1)
+                    registerTime = LocalDateTime.now().plusHours(1)
                 )
                 repository.save(tryUpdateUser)
 

@@ -3,6 +3,7 @@ package app.discord.user.entity
 import app.discord.user.dto.attendance.*
 import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 internal class AttendanceHistory(
@@ -18,13 +19,13 @@ internal class AttendanceHistory(
         map.value.sortedBy { it.startTime }.toMutableList()
     }.toMutableMap()
 
-    internal fun checkAttendance(attendanceTime: OffsetDateTime) =
+    internal fun checkAttendance(attendanceTime: LocalDateTime) =
         this.checkAttendanceStartTime(
             startTime = attendanceTime,
             timePeriods = this.histories.getOrPut(attendanceTime.toLocalDate()) { mutableListOf() }
         )
 
-    internal fun checkExitTime(endTime: OffsetDateTime) : AttendanceResult{
+    internal fun checkExitTime(endTime: LocalDateTime) : AttendanceResult{
         val timePeriods: MutableList<TimePeriod> = this.histories[endTime.toLocalDate()] ?:
         return this.toAttendanceResult(
             status = AttendanceStatus.FAILURE, date = endTime, startTime = endTime, endTime = endTime)
@@ -69,7 +70,7 @@ internal class AttendanceHistory(
     }
 
 
-    private fun checkAttendanceStartTime(startTime: OffsetDateTime, timePeriods: MutableList<TimePeriod>): AttendanceResult{
+    private fun checkAttendanceStartTime(startTime: LocalDateTime, timePeriods: MutableList<TimePeriod>): AttendanceResult{
         val lastPeriod = timePeriods.lastOrNull()
         if(lastPeriod != null && lastPeriod.endTime == null) {
             return this.toAttendanceResult(
@@ -94,8 +95,8 @@ internal class AttendanceHistory(
         timePeriods.fold(Duration.ZERO) { total, period -> total.plus(period.duration) }
 
     private fun toAttendanceResult(
-        status: AttendanceStatus, date: OffsetDateTime, timePeriods: MutableList<TimePeriod> = mutableListOf(),
-        startTime: OffsetDateTime, endTime: OffsetDateTime? = null, attendanceFailedReason: AttendanceFailedReason? = null
+        status: AttendanceStatus, date: LocalDateTime, timePeriods: MutableList<TimePeriod> = mutableListOf(),
+        startTime: LocalDateTime, endTime: LocalDateTime? = null, attendanceFailedReason: AttendanceFailedReason? = null
     ) =
         AttendanceResult(
             status = status,

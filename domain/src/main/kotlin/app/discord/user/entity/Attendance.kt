@@ -2,7 +2,6 @@ package app.discord.user.entity
 
 import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.attendance.*
-import java.time.OffsetDateTime
 
 internal class Attendance(
     histories: Map<UserIdentifier, UserAttendanceHistory>

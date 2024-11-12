@@ -6,10 +6,10 @@ import app.discord.user.DEFAULT_USER_NAME
 import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.attendance.ServerMemberJoinEvent
 import app.discord.user.userRegisterEvent
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 
 fun serverMemberJoinEvent(userIdentifier: UserIdentifier,
-                          joinTime: OffsetDateTime = OffsetDateTime.now(),
+                          joinTime: LocalDateTime = LocalDateTime.now(),
                           userName: String = DEFAULT_USER_NAME) =
     ServerMemberJoinEvent(
         userIdentifier = userIdentifier,

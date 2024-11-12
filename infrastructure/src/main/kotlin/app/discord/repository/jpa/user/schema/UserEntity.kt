@@ -5,6 +5,7 @@ import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.TimeZoneStorage
 import org.hibernate.annotations.TimeZoneStorageType
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 @Entity(name = "Users")
@@ -30,10 +31,10 @@ class UserEntity(
 
     @field: CreationTimestamp
     @field: Column(name = "CREATED_TIME")
-    val registerTime: OffsetDateTime,
+    val registerTime: LocalDateTime,
 
     @field: TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     @field: Column(name = "LEAVE_TIME")
-    val leaveTime: OffsetDateTime
+    val leaveTime: LocalDateTime
 
 )

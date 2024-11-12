@@ -2,16 +2,15 @@ package app.discord.user
 
 import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import app.discord.repository.jpa.user.schema.UserEntity
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
+import java.time.LocalDateTime
 
 const val DEFAULT_GUILD_ID = "testGuildId"
 const val DEFAULT_USER_ID = "testUserId"
 const val DEFAULT_USER_NAME = "testUsername"
 const val DEFAULT_GLOBAL_NAME = "testGlobalName"
 val DEFAULT_USER_ENTITY_IDENTIFIER = UserEntityIdentifier(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
-val DEFAULT_REGISTER_TIME: OffsetDateTime = OffsetDateTime.now()
-val DEFAULT_MIN_TIME: OffsetDateTime = OffsetDateTime.of(1990,1,1,0,0,0,0, ZoneOffset.of("+09:00"))
+val DEFAULT_REGISTER_TIME: LocalDateTime = LocalDateTime.now()
+val DEFAULT_MIN_TIME: LocalDateTime = LocalDateTime.MIN
 
 fun validUserEntity(
     guildId: String = DEFAULT_GUILD_ID,
@@ -28,7 +27,7 @@ fun validUserEntity(
 
 fun leavedUser(
     userEntity: UserEntity,
-    leaveTime: OffsetDateTime = OffsetDateTime.now()
+    leaveTime: LocalDateTime = LocalDateTime.now()
 )= UserEntity(
     id = userEntity.id,
     userIdentifier = userEntity.userIdentifier,
@@ -47,8 +46,8 @@ fun UserEntity.change(
     globalName: String = this.globalName,
     nickname: String = this.nickname,
     isBan: Boolean = this.isBan,
-    registerTime: OffsetDateTime = this.registerTime,
-    leaveTime: OffsetDateTime = this.leaveTime
+    registerTime: LocalDateTime = this.registerTime,
+    leaveTime: LocalDateTime = this.leaveTime
 ) = UserEntity(
     id = id,
     userIdentifier = userIdentifier,

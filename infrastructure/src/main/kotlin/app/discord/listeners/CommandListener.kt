@@ -34,8 +34,8 @@ class CommandListener (
             userName = member.user.name,
             globalName = member.user.globalName?:"",
             nickname = member.nickname?:"",
-            registerTime = OffsetDateTime.now(),
-            leaveTime = OffsetDateTime.of(LocalDateTime.of(1990, 1, 1, 0, 0, 0), ZoneOffset.of("+09:00"))
+            registerTime = LocalDateTime.now(),
+            leaveTime = LocalDateTime.MIN
         )
 
 

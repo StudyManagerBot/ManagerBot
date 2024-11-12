@@ -6,7 +6,6 @@ import app.discord.user.DEFAULT_GUILD_ID
 import app.discord.user.DEFAULT_USER_ID
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
 import java.util.*
 
 
@@ -16,8 +15,8 @@ fun createAttendanceHistoryEntity(id: Long = 1L, guildId: String = DEFAULT_GUILD
                                   userId: String = DEFAULT_USER_ID) = JpaAttendanceHistoryEntity(
     id = id,
     date = LocalDateTime.now().toLocalDate(),
-    attendanceTime = OffsetDateTime.now(),
-    exitTime = OffsetDateTime.now().plusHours(1),
+    attendanceTime = LocalDateTime.now(),
+    exitTime = LocalDateTime.now().plusHours(1),
     userIdentifier = UserEntityIdentifier(
         guildId = guildId,
         userId = userId
@@ -29,7 +28,7 @@ fun createAttendanceHistoryEntityWithoutExitTime(id: Long = 1L, guildId: String 
 = JpaAttendanceHistoryEntity(
     id = id,
     date = LocalDateTime.now().toLocalDate(),
-    attendanceTime = OffsetDateTime.now(),
+    attendanceTime = LocalDateTime.now(),
     exitTime = null,
     userIdentifier = UserEntityIdentifier(
         guildId = guildId,
@@ -47,8 +46,8 @@ fun JpaAttendanceHistoryEntity.change(
                             id: Long? = null,
                             userIdentifier: UserEntityIdentifier? = null,
                             date: LocalDate? = null,
-                            attendanceTime: OffsetDateTime? = null,
-                            exitTime: OffsetDateTime? = null)
+                            attendanceTime: LocalDateTime? = null,
+                            exitTime: LocalDateTime? = null)
     = JpaAttendanceHistoryEntity(
         id = id ?: this.id,
         userIdentifier = userIdentifier ?: this.userIdentifier,

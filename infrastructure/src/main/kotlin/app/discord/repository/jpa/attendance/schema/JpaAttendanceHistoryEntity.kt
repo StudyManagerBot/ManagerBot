@@ -2,7 +2,7 @@ package app.discord.repository.jpa.attendance.schema
 
 import jakarta.persistence.*
 import java.time.LocalDate
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.math.absoluteValue
 
@@ -20,10 +20,10 @@ class JpaAttendanceHistoryEntity(
     val date: LocalDate,
 
     @field:Column(name = "ATTENDANCE_TIME")
-    val attendanceTime: OffsetDateTime,
+    val attendanceTime: LocalDateTime,
 
     @field:Column(name = "EXIT_TIME")
-    val exitTime: OffsetDateTime?
+    val exitTime: LocalDateTime?
 ){
     private val tolerance = 1L
     override fun equals(other: Any?): Boolean
@@ -31,8 +31,10 @@ class JpaAttendanceHistoryEntity(
             id == other.id &&
             userIdentifier == other.userIdentifier &&
             date == other.date &&
-            this.isEqualOffsetDateTime(attendanceTime, other.attendanceTime) &&
-            this.areExitTimesEqual(exitTime = exitTime, other.exitTime)
+            this.attendanceTime == other.attendanceTime &&
+            this.exitTime == other.exitTime
+//            this.isEqualOffsetDateTime(attendanceTime, other.attendanceTime) &&
+//            this.areExitTimesEqual(exitTime = exitTime, other.exitTime)
 
     override fun hashCode(): Int {
         var result = id.hashCode()
@@ -43,14 +45,16 @@ class JpaAttendanceHistoryEntity(
         return result
     }
 
-    private fun areExitTimesEqual(exitTime: OffsetDateTime?, other: OffsetDateTime?): Boolean
+    @Deprecated("for removal")
+    private fun areExitTimesEqual(exitTime: LocalDateTime?, other: LocalDateTime?): Boolean
     = when {
         exitTime == null && other == null -> true
         exitTime != null && other != null -> isEqualOffsetDateTime(exitTime, other)
         else -> false
     }
 
-    private fun isEqualOffsetDateTime(target: OffsetDateTime, other: OffsetDateTime): Boolean{
+    @Deprecated("for removal")
+    private fun isEqualOffsetDateTime(target: LocalDateTime, other: LocalDateTime): Boolean{
         val timeDifference = ChronoUnit.SECONDS.between(target, other)
         return timeDifference.absoluteValue <= tolerance
     }
