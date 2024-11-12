@@ -6,8 +6,6 @@ import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent
 import org.springframework.context.ApplicationEventPublisher
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
 
 
 @DiscordEventHandler
@@ -25,6 +23,6 @@ class BotRegisterGuildEventListener(
         globalName = member.user.globalName ?: "IamBot",
         registerTime = member.timeJoined.toLocalDateTime(),
         nickname = member.nickname ?: "IamBot",
-        leaveTime = LocalDateTime.MIN
+        isLeft = false
     )
 }

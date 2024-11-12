@@ -2,15 +2,12 @@ package app.discord.listeners
 
 import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.UserRegisterEvent
-import app.discord.user.dto.attendance.ServerMemberJoinEvent
-import app.discord.user.dto.attendance.ServerMemberLeftEvent
+import app.discord.user.dto.attendance.ChannelMemberJoinEvent
+import app.discord.user.dto.attendance.ChannelMemberLeftEvent
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent
 import org.springframework.context.ApplicationEventPublisher
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 
 @DiscordEventHandler
 class GuildVoiceUpdateListener(
@@ -30,10 +27,10 @@ class GuildVoiceUpdateListener(
         else throw IllegalArgumentException("유저 Channal 정보 오류")
     }
 
-    private fun toChannelJoinEvent(event: GuildVoiceUpdateEvent, audioChannel: AudioChannelUnion): ServerMemberJoinEvent {
+    private fun toChannelJoinEvent(event: GuildVoiceUpdateEvent, audioChannel: AudioChannelUnion): ChannelMemberJoinEvent {
         val userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.member.id)
         val userName = event.member.user.name
-        return ServerMemberJoinEvent(
+        return ChannelMemberJoinEvent(
             userIdentifier = userIdentifier,
             userName = userName,
             channelId = audioChannel.id, channelName = audioChannel.name,
@@ -44,16 +41,16 @@ class GuildVoiceUpdateListener(
                 globalName = event.member.user.globalName?:"unknown",
                 nickname = event.member.nickname?:"unknown",
                 registerTime = LocalDateTime.now(),
-                leaveTime = LocalDateTime.MIN
+                isLeft = false
             )
         )
     }
 
     private fun toChannelLeftEvent(event: GuildVoiceUpdateEvent, audioChannel: AudioChannelUnion) =
-        ServerMemberLeftEvent(
+        ChannelMemberLeftEvent(
             userIdentifier = UserIdentifier(guildId = event.guild.id, userId = event.member.user.id),
             userName = event.member.user.name,
             channelId = audioChannel.id, channelName = audioChannel.name,
-            leftTime = LocalDateTime.now()
+            leavedTime = LocalDateTime.now()
         )
 }

@@ -10,7 +10,7 @@ fun validUser()= User(
     globalName = DEFAULT_USER_NAME,
     nickname = DEFAULT_NICK_NAME,
     registerTime = DEFAULT_REGISTER_TIME,
-    leaveTime = DEFAULT_MIN_TIME,
+    isLeft = DEFAULT_LEFT_STATUS,
     isBan = false,
     userAttendanceHistory = emptyMap()
 )
@@ -25,7 +25,7 @@ fun inValidUserName(
     globalName = DEFAULT_USER_NAME,
     nickname = DEFAULT_NICK_NAME,
     registerTime = DEFAULT_REGISTER_TIME,
-    leaveTime = DEFAULT_MIN_TIME,
+    isLeft = DEFAULT_LEFT_STATUS,
     isBan = false,
     userAttendanceHistory = emptyMap()
 )
@@ -36,7 +36,7 @@ fun validUserWithHistory() = User(
     globalName = DEFAULT_USER_NAME,
     nickname = DEFAULT_NICK_NAME,
     registerTime = DEFAULT_REGISTER_TIME,
-    leaveTime = DEFAULT_MIN_TIME,
+    isLeft = DEFAULT_LEFT_STATUS,
     isBan = false,
     userAttendanceHistory = singleCheckAttendanceHistory(
         userIdentifier = DEFAULT_USER_IDENTIFIER

@@ -3,7 +3,6 @@ package app.discord.user.entity
 import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.attendance.*
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
 import java.util.regex.Pattern
 
 class User (
@@ -12,7 +11,7 @@ class User (
     globalName: String,
     nickname: String,
     val registerTime: LocalDateTime,
-    val leaveTime: LocalDateTime,
+    val isLeft: Boolean,
     val isBan: Boolean,
     private val userAttendanceHistory: Map<UserIdentifier, UserAttendanceHistory>
 ){
@@ -30,7 +29,7 @@ class User (
     fun updateUserInfo(userName: String = "",
                        globalName: String = "",
                        nickname: String = "",
-                       leaveTime: LocalDateTime = this.leaveTime): User
+                       isLeft: Boolean = this.isLeft): User
     {
         validateCheck(userName, errorMessage = "Invalid user name")
         validateCheck(globalName, errorMessage = "Invalid global name")
@@ -42,20 +41,20 @@ class User (
             globalName = globalName.ifBlank { this.globalName },
             nickname = nickname.ifBlank { this.nickname },
             registerTime = this.registerTime,
-            leaveTime = leaveTime,
+            isLeft = isLeft,
             isBan = this.isBan,
             userAttendanceHistory = userAttendanceHistory,
         )
     }
 
-    fun leaveUser(leaveTime: LocalDateTime): User =
+    fun leaveUser(isLeft: Boolean): User =
         User(
             userIdentifier = this.userIdentifier,
             userName = this.userName,
             globalName = this.globalName,
             nickname = this.nickname,
             registerTime = this.registerTime,
-            leaveTime = leaveTime,
+            isLeft = isLeft,
             isBan = this.isBan,
             userAttendanceHistory = userAttendanceHistory,
         )
@@ -66,10 +65,10 @@ class User (
     fun getLatestAttendanceHistory(userIdentifier: UserIdentifier = this.userIdentifier) =
         this.attendance.getLatestAttendanceHistory(userIdentifier = userIdentifier)
 
-    fun joinAttendance(event: ServerMemberJoinEvent): AttendanceResult =
+    fun joinAttendance(event: ChannelMemberJoinEvent): AttendanceResult =
         this.attendance.checkAttendance(serverMemberJoinEvent = event)
 
-    fun leftAttendance(event: ServerMemberLeftEvent): AttendanceResult =
+    fun leftAttendance(event: ChannelMemberLeftEvent): AttendanceResult =
         this.attendance.checkAttendance(serverMemberLeftEvent = event)
 
     private fun validateCheck(field: String, errorMessage: String) =

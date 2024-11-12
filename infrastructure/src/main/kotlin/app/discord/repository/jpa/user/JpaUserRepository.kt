@@ -10,6 +10,7 @@ import app.discord.user.dto.attendance.UserAttendance
 import app.discord.user.entity.User
 import app.discord.user.repository.UserRepository
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 open class JpaUserRepository(
     private val jpaUserEntityRepository: JpaUserEntityRepository,
@@ -113,7 +114,8 @@ open class JpaUserRepository(
             nickname = user.nickname,
             isBan = user.isBan,
             registerTime = user.registerTime,
-            leaveTime = user.leaveTime
+            isLeft = user.isLeft,
+            updateAt = LocalDateTime.now(),
         )
 
 
@@ -127,7 +129,7 @@ open class JpaUserRepository(
             globalName = jpaEntity.globalName,
             nickname = jpaEntity.nickname,
             registerTime = jpaEntity.registerTime,
-            leaveTime = jpaEntity.leaveTime,
+            isLeft = jpaEntity.isLeft,
             isBan = jpaEntity.isBan,
             userAttendanceHistory =
             if (jpaAttendanceHistories.isNotEmpty()) UserAttendanceHistoryMapper.map(jpaAttendanceHistories = jpaAttendanceHistories) else mapOf()

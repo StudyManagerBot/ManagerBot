@@ -38,7 +38,7 @@ class CheckUserTest : BehaviorSpec({
 
                 updatedUser.userIdentifier shouldBe user.userIdentifier
                 updatedUser.registerTime shouldBe user.registerTime
-                updatedUser.leaveTime shouldBe user.leaveTime
+                updatedUser.isLeft shouldBe user.isLeft
                 updatedUser.isBan shouldBe user.isBan
             }
         }

@@ -9,5 +9,5 @@ abstract class UserEvent(
     val registerTime: OffsetDateTime,
     val globalName: String,
     val nickname: String,
-    val leaveTime: OffsetDateTime
+    val isLeft: Boolean
 )

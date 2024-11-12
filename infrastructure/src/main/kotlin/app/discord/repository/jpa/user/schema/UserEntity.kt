@@ -3,10 +3,8 @@ package app.discord.repository.jpa.user.schema
 import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.TimeZoneStorage
-import org.hibernate.annotations.TimeZoneStorageType
+import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
 
 @Entity(name = "Users")
 class UserEntity(
@@ -29,12 +27,15 @@ class UserEntity(
     @field: Column(name = "IS_BAN", nullable = false)
     val isBan: Boolean,
 
+    @field: Column(name = "IS_LEAVED")
+    val isLeft: Boolean = false,
+
     @field: CreationTimestamp
     @field: Column(name = "CREATED_TIME")
     val registerTime: LocalDateTime,
 
-    @field: TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
-    @field: Column(name = "LEAVE_TIME")
-    val leaveTime: LocalDateTime
+    @field: UpdateTimestamp
+    @field: Column(name = "UPDATE_AT")
+    val updateAt: LocalDateTime,
 
-)
+    )

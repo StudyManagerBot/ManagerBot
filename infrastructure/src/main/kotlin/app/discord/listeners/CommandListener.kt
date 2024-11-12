@@ -6,8 +6,6 @@ import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import org.springframework.context.ApplicationEventPublisher
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
 
 @DiscordEventHandler
 class CommandListener (
@@ -35,7 +33,7 @@ class CommandListener (
             globalName = member.user.globalName?:"",
             nickname = member.nickname?:"",
             registerTime = LocalDateTime.now(),
-            leaveTime = LocalDateTime.MIN
+            isLeft = false
         )
 
 

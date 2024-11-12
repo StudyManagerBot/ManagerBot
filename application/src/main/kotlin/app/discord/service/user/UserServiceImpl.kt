@@ -1,8 +1,8 @@
 package app.discord.service.user
 
 import app.discord.user.dto.*
-import app.discord.user.dto.attendance.ServerMemberJoinEvent
-import app.discord.user.dto.attendance.ServerMemberLeftEvent
+import app.discord.user.dto.attendance.ChannelMemberJoinEvent
+import app.discord.user.dto.attendance.ChannelMemberLeftEvent
 import app.discord.user.entity.User
 import app.discord.user.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -24,7 +24,7 @@ class UserServiceImpl(
                 globalName = userRegisterEvent.globalName,
                 nickname = userRegisterEvent.nickname,
                 registerTime = userRegisterEvent.registerTime,
-                leaveTime = userRegisterEvent.leaveTime,
+                isLeft = userRegisterEvent.isLeft,
                 isBan = false,
                 userAttendanceHistory = emptyMap()
             )
@@ -40,7 +40,7 @@ class UserServiceImpl(
                 userName = userRegisterEvent.userName,
                 globalName = userRegisterEvent.globalName,
                 nickname = userRegisterEvent.nickname,
-                leaveTime = userRegisterEvent.leaveTime
+                isLeft = userRegisterEvent.isLeft
             )
             userRepository.updateUser(user = oldUser)
             return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
@@ -72,7 +72,7 @@ class UserServiceImpl(
     @Transactional
     override fun leaveUser(guildMemberLeaveEvent: GuildMemberLeaveEvent): UserResult {
         val user: User = userRepository.findUserWithNullException(userIdentifier = guildMemberLeaveEvent.userIdentifier)
-        val leavedUser = user.leaveUser(leaveTime = guildMemberLeaveEvent.leaveTime)
+        val leavedUser = user.leaveUser(isLeft = guildMemberLeaveEvent.isLeft)
 
         userRepository.updateUser(user = leavedUser)
         return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
@@ -84,7 +84,7 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun channelJoin(serverMemberJoinEvent: ServerMemberJoinEvent) {
+    override fun channelJoin(serverMemberJoinEvent: ChannelMemberJoinEvent) {
         val user:User? = userRepository.findUser(userIdentifier = serverMemberJoinEvent.userIdentifier)
 
         if(user == null){
@@ -94,7 +94,7 @@ class UserServiceImpl(
                 globalName = serverMemberJoinEvent.userRegisterEvent.globalName,
                 nickname = serverMemberJoinEvent.userRegisterEvent.nickname,
                 registerTime = serverMemberJoinEvent.userRegisterEvent.registerTime,
-                leaveTime = serverMemberJoinEvent.userRegisterEvent.leaveTime,
+                isLeft = serverMemberJoinEvent.userRegisterEvent.isLeft,
                 isBan = false,
                 userAttendanceHistory = emptyMap()
             )
@@ -110,7 +110,7 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun channelExit(serverMemberLeftEvent: ServerMemberLeftEvent) {
+    override fun channelExit(serverMemberLeftEvent: ChannelMemberLeftEvent) {
         val user: User = userRepository.findUserWithNullException(userIdentifier = serverMemberLeftEvent.userIdentifier)
         user.leftAttendance(serverMemberLeftEvent)
         this.userRepository.updateUser(user = user)

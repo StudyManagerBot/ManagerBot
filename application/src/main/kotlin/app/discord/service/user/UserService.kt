@@ -1,8 +1,8 @@
 package app.discord.service.user
 
 import app.discord.user.dto.*
-import app.discord.user.dto.attendance.ServerMemberJoinEvent
-import app.discord.user.dto.attendance.ServerMemberLeftEvent
+import app.discord.user.dto.attendance.ChannelMemberJoinEvent
+import app.discord.user.dto.attendance.ChannelMemberLeftEvent
 
 
 interface UserService {
@@ -13,6 +13,6 @@ interface UserService {
     fun leaveUser(guildMemberLeaveEvent: GuildMemberLeaveEvent): UserResult
 //    fun registerGuildMembers(registerGuildMembers: List<UserRegisterEvent>) // command에서 UserRegisterEvent를 복수개 발생시킴.
     fun deleteAllGuildMembers(botKickedEvent: BotKickedEvent)
-    fun channelJoin(serverMemberJoinEvent: ServerMemberJoinEvent)
-    fun channelExit(serverMemberLeftEvent: ServerMemberLeftEvent)
+    fun channelJoin(serverMemberJoinEvent: ChannelMemberJoinEvent)
+    fun channelExit(serverMemberLeftEvent: ChannelMemberLeftEvent)
 }

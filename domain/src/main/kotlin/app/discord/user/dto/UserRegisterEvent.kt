@@ -8,5 +8,5 @@ data class UserRegisterEvent(
     val globalName: String,
     val nickname: String,
     val registerTime: LocalDateTime,
-    val leaveTime: LocalDateTime,
+    val isLeft: Boolean,
 )

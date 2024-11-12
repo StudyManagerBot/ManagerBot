@@ -1,6 +1,7 @@
 package app.discord.user
 
 import app.discord.jpa.JpaTest
+import app.discord.jpa.isSame
 import app.discord.repository.jpa.attendance.JpaAttendanceHistoryRepository
 import app.discord.repository.jpa.user.JpaUserEntityRepository
 import app.discord.repository.jpa.user.JpaUserRepository
@@ -26,7 +27,7 @@ class UserRepositoryTest @Autowired constructor(
             val insertUser = userRepository.insertUser(user = validUser)
             then("successfully insert"){
                 insertUser.userIdentifier shouldBe validUser.userIdentifier
-                insertUser.registerTime shouldBe validUser.registerTime
+                (insertUser.registerTime isSame validUser.registerTime) shouldBe true
                 insertUser.getTotalAttendanceHistories() shouldContainAll validUser.getTotalAttendanceHistories()
             }
         }

@@ -47,7 +47,7 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
                 registeredUser?.nickname shouldBe registerUser.nickname
                 registeredUser?.isBan shouldBe registerUser.isBan
                 registeredUser?.registerTime shouldBe registerUser.registerTime
-                registeredUser?.leaveTime shouldBe registerUser.leaveTime
+                registeredUser?.isLeft shouldBe registerUser.isLeft
 
             }
         }
@@ -66,7 +66,6 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
                 foundUser?.nickname shouldBe testUser.nickname
                 foundUser?.isBan shouldBe testUser.isBan
                 foundUser?.registerTime shouldBe testUser.registerTime
-                foundUser?.leaveTime shouldBe LocalDateTime.MIN
             }
         }
         `when`("유저 정보가 없다면"){
@@ -126,11 +125,11 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
                 val updatedUser = repository.findByUserIdentifier(DEFAULT_USER_ENTITY_IDENTIFIER)
 
                 leavedUser.id shouldBe testUser.id
-                (leavedUser.leaveTime isSame testUser.leaveTime) shouldBeEqual false
+                leavedUser.isLeft shouldBe  testUser.isLeft
 
                 updatedUser shouldNotBe null
                 updatedUser?.id shouldBe testUser.id
-                (updatedUser?.leaveTime isSame leavedUser.leaveTime) shouldBeEqual true
+                updatedUser?.isLeft shouldBe leavedUser.isLeft
 
             }
         }

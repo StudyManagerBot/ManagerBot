@@ -5,8 +5,8 @@ import app.discord.user.dto.BotKickedEvent
 import app.discord.user.dto.GuildMemberLeaveEvent
 import app.discord.user.dto.UserRegisterEvent
 import app.discord.user.dto.UserUpdateEvent
-import app.discord.user.dto.attendance.ServerMemberJoinEvent
-import app.discord.user.dto.attendance.ServerMemberLeftEvent
+import app.discord.user.dto.attendance.ChannelMemberJoinEvent
+import app.discord.user.dto.attendance.ChannelMemberLeftEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Controller
 
@@ -34,13 +34,13 @@ class DiscordEventController(
         userService.deleteAllGuildMembers(botKickedEvent = event)
     }
 
-    @EventListener(ServerMemberJoinEvent::class)
-    fun handleServerJoinEvent(event: ServerMemberJoinEvent) {
+    @EventListener(ChannelMemberJoinEvent::class)
+    fun handleServerJoinEvent(event: ChannelMemberJoinEvent) {
         userService.channelJoin(serverMemberJoinEvent = event)
     }
 
-    @EventListener(ServerMemberLeftEvent::class)
-    fun handleServerLeftEvent(event: ServerMemberLeftEvent) {
+    @EventListener(ChannelMemberLeftEvent::class)
+    fun handleServerLeftEvent(event: ChannelMemberLeftEvent) {
         userService.channelExit(serverMemberLeftEvent = event)
     }
 }

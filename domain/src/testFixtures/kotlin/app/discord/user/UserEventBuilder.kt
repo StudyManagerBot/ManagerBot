@@ -2,8 +2,8 @@ package app.discord.user
 
 import app.discord.user.dto.UserIdentifier
 import app.discord.user.dto.UserRegisterEvent
-import app.discord.user.dto.attendance.ServerMemberJoinEvent
-import app.discord.user.dto.attendance.ServerMemberLeftEvent
+import app.discord.user.dto.attendance.ChannelMemberJoinEvent
+import app.discord.user.dto.attendance.ChannelMemberLeftEvent
 import java.time.LocalDateTime
 
 const val DEFAULT_GUILD_ID = "testGuildId"
@@ -19,14 +19,14 @@ const val INVALID_SPECIAL_STRING = "'; DROP TABLE users; --"
 const val INVALID_EMPTY_STRING= "   "
 
 val DEFAULT_REGISTER_TIME: LocalDateTime = LocalDateTime.now()
-val DEFAULT_MIN_TIME: LocalDateTime = LocalDateTime.MIN
+const val DEFAULT_LEFT_STATUS: Boolean = false
 
 
 fun userRegisterEvent(
     globalName: String = "",
     nickName: String = "",
     registerTime: LocalDateTime = DEFAULT_REGISTER_TIME,
-    leaveTime: LocalDateTime = DEFAULT_MIN_TIME
+    isLeft: Boolean = DEFAULT_LEFT_STATUS
 ) =
     UserRegisterEvent(
         userIdentifier = DEFAULT_USER_IDENTIFIER,
@@ -34,10 +34,10 @@ fun userRegisterEvent(
         globalName = globalName,
         nickname = nickName,
         registerTime = registerTime,
-        leaveTime = leaveTime,
+        isLeft = isLeft,
     )
 fun serverMemberJoinEvent() =
-    ServerMemberJoinEvent(
+    ChannelMemberJoinEvent(
         userIdentifier = DEFAULT_USER_IDENTIFIER,
         userName = DEFAULT_USER_NAME,
         channelId = DEFAULT_CHANNEL_ID,
@@ -49,15 +49,15 @@ fun serverMemberJoinEvent() =
             globalName = "",
             nickname = "",
             registerTime = DEFAULT_REGISTER_TIME,
-            leaveTime = DEFAULT_MIN_TIME
+            isLeft = DEFAULT_LEFT_STATUS
     )
 )
 
 fun serverMemberLeftEvent() =
-    ServerMemberLeftEvent(
+    ChannelMemberLeftEvent(
         userIdentifier = DEFAULT_USER_IDENTIFIER,
         userName = DEFAULT_USER_NAME,
         channelId = DEFAULT_CHANNEL_ID,
         channelName = DEFAULT_CHANNEL_NAME,
-        leftTime = LocalDateTime.now(),
+        leavedTime = LocalDateTime.now(),
     )

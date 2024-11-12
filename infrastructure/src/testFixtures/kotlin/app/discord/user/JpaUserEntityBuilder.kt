@@ -10,7 +10,8 @@ const val DEFAULT_USER_NAME = "testUsername"
 const val DEFAULT_GLOBAL_NAME = "testGlobalName"
 val DEFAULT_USER_ENTITY_IDENTIFIER = UserEntityIdentifier(guildId = DEFAULT_GUILD_ID, userId = DEFAULT_USER_ID)
 val DEFAULT_REGISTER_TIME: LocalDateTime = LocalDateTime.now()
-val DEFAULT_MIN_TIME: LocalDateTime = LocalDateTime.MIN
+const val DEFAULT_LEFT_STATUS: Boolean = false
+val DEFAULT_UPDATE_TIME: LocalDateTime = LocalDateTime.now()
 
 fun validUserEntity(
     guildId: String = DEFAULT_GUILD_ID,
@@ -22,12 +23,13 @@ fun validUserEntity(
     nickname = "",
     isBan = false,
     registerTime = DEFAULT_REGISTER_TIME,
-    leaveTime = DEFAULT_MIN_TIME
+    isLeft = DEFAULT_LEFT_STATUS,
+    updateAt = DEFAULT_UPDATE_TIME
 )
 
 fun leavedUser(
     userEntity: UserEntity,
-    leaveTime: LocalDateTime = LocalDateTime.now()
+    isLeft: Boolean = DEFAULT_LEFT_STATUS
 )= UserEntity(
     id = userEntity.id,
     userIdentifier = userEntity.userIdentifier,
@@ -36,7 +38,8 @@ fun leavedUser(
     nickname = userEntity.nickname,
     isBan = userEntity.isBan,
     registerTime = userEntity.registerTime,
-    leaveTime = leaveTime
+    isLeft = isLeft,
+    updateAt = DEFAULT_UPDATE_TIME
 )
 
 fun UserEntity.change(
@@ -47,7 +50,7 @@ fun UserEntity.change(
     nickname: String = this.nickname,
     isBan: Boolean = this.isBan,
     registerTime: LocalDateTime = this.registerTime,
-    leaveTime: LocalDateTime = this.leaveTime
+    isLeft: Boolean = this.isLeft
 ) = UserEntity(
     id = id,
     userIdentifier = userIdentifier,
@@ -56,5 +59,6 @@ fun UserEntity.change(
     nickname = nickname,
     isBan = isBan,
     registerTime = registerTime,
-    leaveTime = leaveTime
+    isLeft = isLeft,
+    updateAt = DEFAULT_UPDATE_TIME
 )

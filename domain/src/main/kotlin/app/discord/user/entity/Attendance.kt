@@ -10,7 +10,7 @@ internal class Attendance(
         AttendanceHistory(attendanceHistories = it.value)
     }.toMutableMap()
 
-    internal fun checkAttendance( serverMemberJoinEvent: ServerMemberJoinEvent): AttendanceResult =
+    internal fun checkAttendance( serverMemberJoinEvent: ChannelMemberJoinEvent): AttendanceResult =
         this.attendanceHistories.getOrPut(serverMemberJoinEvent.userIdentifier) {
             AttendanceHistory(
                 attendanceHistories = UserAttendanceHistory(
@@ -27,8 +27,8 @@ internal class Attendance(
         }.checkAttendance(attendanceTime = serverMemberJoinEvent.joinTime)
 
 
-    internal fun checkAttendance( serverMemberLeftEvent: ServerMemberLeftEvent ): AttendanceResult =
-        attendanceHistories[serverMemberLeftEvent.userIdentifier]?.checkExitTime(serverMemberLeftEvent.leftTime)
+    internal fun checkAttendance( serverMemberLeftEvent: ChannelMemberLeftEvent ): AttendanceResult =
+        attendanceHistories[serverMemberLeftEvent.userIdentifier]?.checkExitTime(serverMemberLeftEvent.leavedTime)
             ?: throw IllegalArgumentException("user attendance history not exists")
 
     internal fun getUserTotalAttendanceHistories(userIdentifier: UserIdentifier? = null): List<UserAttendanceHistory> {

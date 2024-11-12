@@ -1,16 +1,13 @@
 package app.discord.user.dto.attendance
 
 import app.discord.user.dto.UserIdentifier
-import app.discord.user.dto.UserRegisterEvent
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
 
-data class ServerMemberJoinEvent(
+data class ChannelMemberLeftEvent(
     val userIdentifier: UserIdentifier,
     val userName: String,
 
     val channelId: String,
     val channelName: String,
-    val joinTime: LocalDateTime,
-    val userRegisterEvent: UserRegisterEvent
+    val leavedTime: LocalDateTime,
 )
