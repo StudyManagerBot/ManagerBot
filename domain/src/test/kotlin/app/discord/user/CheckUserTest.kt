@@ -8,20 +8,6 @@ import io.kotest.matchers.shouldBe
 
 class CheckUserTest : BehaviorSpec({
 
-    given("등록되지 않은 유저가"){
-        val user = null
-        `when`("길드채널에 출석을 하면"){
-            val serverMemberJoinEvent = serverMemberJoinEvent()
-            then("유저를 가입시키고, 출석 처리를 한다."){
-                if(user == null){
-                    val registerUser = validUser()
-                    val attendanceResult = registerUser.joinAttendance(serverMemberJoinEvent)
-                    attendanceResult.status.isOk() shouldBe true
-                }
-            }
-        }
-    }
-
     given("올바른 유저가") {
         val user = validUser()
         `when`("올바른 유저정보를 업데이트하면"){

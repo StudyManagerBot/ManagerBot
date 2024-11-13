@@ -23,8 +23,8 @@ class JpaUserEntityRepositoryTest @Autowired constructor(
     repository.save(testUser)
 
     given("유저를 등록할 때"){
-        val registerGuildId = "newguildId"
-        val registerUserId = "newuserId"
+        val registerGuildId = "newGuildId"
+        val registerUserId = "newUserId"
         val registerUser = validUserEntity(
             guildId = registerGuildId,
             userId = registerUserId,

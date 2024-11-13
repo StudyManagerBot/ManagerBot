@@ -26,9 +26,9 @@ class User (
         private const val SQL_INJECTION_REGEX = "('.+--)|(--)|(%7C)|(;)|(\\b(SELECT|INSERT|UPDATE|DELETE|DROP|TRUNCATE|CREATE|ALTER|GRANT|REVOKE|UNION|ALL)\\b)"
     }
 
-    fun updateUserInfo(userName: String = "",
-                       globalName: String = "",
-                       nickname: String = "",
+    fun updateUserInfo(userName: String = this.userName,
+                       globalName: String = this.globalName,
+                       nickname: String = this.nickname,
                        isLeft: Boolean = this.isLeft): User
     {
         validateCheck(userName, errorMessage = "Invalid user name")
