@@ -96,6 +96,7 @@ open class JpaUserRepository(
 
     }
 
+    @Transactional
     override fun deleteAllMembers(guildId: String) {
         val members = jpaUserEntityRepository.findAllByUserIdentifierGuildId(guildId = guildId)
         jpaUserEntityRepository.deleteAllInBatch(members)

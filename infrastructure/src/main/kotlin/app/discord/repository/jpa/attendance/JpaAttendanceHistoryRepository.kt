@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository
 interface JpaAttendanceHistoryRepository : JpaRepository<JpaAttendanceHistoryEntity, Long>{
     fun findAllByUserIdentifier(userEntityIdentifier: UserEntityIdentifier): List<JpaAttendanceHistoryEntity>
 
-    @Query("SELECT h FROM histories h ORDER BY h.attendanceTime DESC")
+    @Query("SELECT h FROM histories h ORDER BY h.attendanceTime DESC LIMIT 1")
     fun findFirstOrderByAttendanceTimeDesc(): JpaAttendanceHistoryEntity?
 }

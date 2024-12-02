@@ -1,5 +1,6 @@
 package app.discord.user
 
+import app.discord.jpa.JpaTest
 import app.discord.jpa.isSame
 import app.discord.repository.jpa.attendance.schema.UserEntityIdentifier
 import app.discord.repository.jpa.user.JpaUserEntityRepository
@@ -11,10 +12,9 @@ import io.kotest.matchers.shouldNotBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import java.time.LocalDateTime
 
-@DataJpaTest
+@JpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 class JpaUserEntityRepositoryTest @Autowired constructor(
     private val repository: JpaUserEntityRepository
