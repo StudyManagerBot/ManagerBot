@@ -28,10 +28,7 @@ class UserServiceImpl(
                 isBan = false,
                 userAttendanceHistory = emptyMap()
             )
-
-
             userRepository.insertUser(registerUser)
-
             return UserResult(status = UserResultStatus.SUCCESS, errorMessage = "")
         }
         else {
@@ -85,34 +82,27 @@ class UserServiceImpl(
 
     @Transactional
     override fun channelJoin(serverMemberJoinEvent: ChannelMemberJoinEvent) {
-        val user:User? = userRepository.findUser(userIdentifier = serverMemberJoinEvent.userIdentifier)
-
-        if(user == null){
-            val registerUser = User(
+        val isUser:User? = userRepository.findUser(userIdentifier = serverMemberJoinEvent.userIdentifier)
+        if(isUser == null){
+            val userRegisterEvent: UserRegisterEvent = UserRegisterEvent(
                 userIdentifier = serverMemberJoinEvent.userRegisterEvent.userIdentifier,
                 userName = serverMemberJoinEvent.userRegisterEvent.userName,
                 globalName = serverMemberJoinEvent.userRegisterEvent.globalName,
                 nickname = serverMemberJoinEvent.userRegisterEvent.nickname,
                 registerTime = serverMemberJoinEvent.userRegisterEvent.registerTime,
-                isLeft = serverMemberJoinEvent.userRegisterEvent.isLeft,
-                isBan = false,
-                userAttendanceHistory = emptyMap()
+                isLeft = serverMemberJoinEvent.userRegisterEvent.isLeft
             )
-            userRepository.insertUser(registerUser)
-            registerUser.joinAttendance(event = serverMemberJoinEvent)
-            this.userRepository.updateUser(user = registerUser)
-
-        }else {
-            user.joinAttendance(event = serverMemberJoinEvent)
-            this.userRepository.updateUser(user = user)
+            this.registerUser(userRegisterEvent = userRegisterEvent)
         }
 
+        val user: User = userRepository.findUserWithNullException(userIdentifier = serverMemberJoinEvent.userIdentifier)
+        userRepository.insertUser(user = user)
     }
 
     @Transactional
     override fun channelExit(serverMemberLeftEvent: ChannelMemberLeftEvent) {
         val user: User = userRepository.findUserWithNullException(userIdentifier = serverMemberLeftEvent.userIdentifier)
         user.leftAttendance(serverMemberLeftEvent)
-        this.userRepository.updateUser(user = user)
+        this.userRepository.insertUser(user = user)
     }
 }
