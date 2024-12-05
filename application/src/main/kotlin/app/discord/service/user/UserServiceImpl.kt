@@ -94,8 +94,8 @@ class UserServiceImpl(
             )
             this.registerUser(userRegisterEvent = userRegisterEvent)
         }
-
         val user: User = userRepository.findUserWithNullException(userIdentifier = serverMemberJoinEvent.userIdentifier)
+        user.joinAttendance(event = serverMemberJoinEvent)
         userRepository.insertUser(user = user)
     }
 

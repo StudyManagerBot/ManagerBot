@@ -31,14 +31,16 @@ open class JpaUserRepository(
         return if(userEntity != null) this.toDomainEntity(userEntity, jpaAttendanceHistories) else null
     }
 
-
     override fun findUserWithNullException(userIdentifier: UserIdentifier): User =
         this.findUser(userIdentifier = userIdentifier) ?: throw NullPointerException("user not found")
 
     @Transactional
     override fun insertUser(user: User): User{
         val userEntity = toJpaEntity(user = user)
-        jpaUserEntityRepository.save(userEntity)
+        val jpaUser = jpaUserEntityRepository.findByUserIdentifier(userEntity.userIdentifier)
+        if (jpaUser == null){
+            jpaUserEntityRepository.save(userEntity)
+        }
 
         val userEntityIdentifier = UserEntityIdentifier(
             guildId = user.userIdentifier.guildId,
@@ -68,6 +70,7 @@ open class JpaUserRepository(
                     ))
             }
         }
+
         val jpaAttendanceHistories =
             this.jpaAttendanceHistoryRepository.findAllByUserIdentifier(userEntityIdentifier = userEntityIdentifier)
         return toDomainEntity(jpaEntity = userEntity, jpaAttendanceHistories = jpaAttendanceHistories)
