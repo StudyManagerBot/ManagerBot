@@ -31,6 +31,7 @@ class UserRepositoryTest @Autowired constructor(
             then("successfully insert"){
                 insertUser.userIdentifier shouldBe validUser.userIdentifier
                 (insertUser.registerTime isSame validUser.registerTime) shouldBe true
+                insertUser.getTotalAttendanceHistories() shouldContainAll validUser.getTotalAttendanceHistories()
             }
         }
     }
